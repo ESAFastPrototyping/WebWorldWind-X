@@ -1,0 +1,38 @@
+{
+  "name": "webworldwind-x",
+  "version": "1.0.0",
+  "description": "Extension repository collecting work done in the scope of EOAPPS project within ESA.",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack-cli --config webpack.config.js --mode production",
+    "watch": "webpack --watch",
+    "start": "webpack-dev-server --open"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/balhar-jakub/webworldwind-x.git"
+  },
+  "keywords": [
+    "Web World Wind",
+    "Earth Observation",
+    "3D Globe"
+  ],
+  "author": "Jakub Balhar, Yann Voumard, Florin Draghici, Servlet Giafher, Claudia Ifrim",
+  "license": "APL-2.0",
+  "bugs": {
+    "url": "https://github.com/balhar-jakub/webworldwind-x/issues"
+  },
+  "homepage": "https://github.com/balhar-jakub/webworldwind-x#readme",
+  "devDependencies": {
+    "@babel/core": "7.0.0",
+    "babel-loader": "8.0.0",
+    "css-loader": "1.0.0",
+    "webpack": "4.17.1",
+    "webpack-cli": "3.1.0",
+    "webpack-dev-server": "^3.1.7"
+  },
+  "dependencies": {
+    "@nasaworldwind/worldwind": "0.9.0"
+  }
+}
