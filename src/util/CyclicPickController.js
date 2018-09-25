@@ -13,18 +13,22 @@ class CyclicPickController {
      * @param {Function} cb A callback function to call with the current highlighted renderables.
      */
     constructor(wwd, events, cb) {
-        for (let i = 0; i < events.length; i++) {
-            wwd.addEventListener(events[i], event => {
-                const x = event.clientX,
-                    y = event.clientY;
+        this.eventListener = this.eventListener.bind(this, wwd, cb);
 
-                const pickList = wwd.pick(wwd.canvasCoordinates(x, y));
-                const highlightedRenderables = this.setNextHighlightStage(pickList.objects);
-                wwd.redraw();
-                if (cb) {
-                    cb(highlightedRenderables);
-                }
-            });
+        events.forEach(event => {
+            wwd.addEventListener(event, this.eventListener);
+        });
+    }
+
+    eventListener(wwd, cb) {
+        const x = event.clientX,
+            y = event.clientY;
+
+        const pickList = wwd.pick(wwd.canvasCoordinates(x, y));
+        const highlightedRenderables = this.setNextHighlightStage(pickList.objects);
+        wwd.redraw();
+        if (cb) {
+            cb(highlightedRenderables);
         }
     }
 

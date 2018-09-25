@@ -4,10 +4,21 @@
   "description": "Extension repository collecting work done in the scope of EOAPPS project within ESA.",
   "main": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack-cli --config webpack.config.js --mode production",
-    "watch": "webpack --watch",
-    "start": "webpack-dev-server --open"
+    "build": "npm run clean && npm run lint && npm run test && npm run jsdoc && npm run webpack && npm run copy && npm run remove",
+    "build:watch": "parallelshell 'npm run webpack:watch' 'npm run examples:watch'",
+    "clean": "del-cli dist",
+    "copy": "copyfiles examples/*.html dist/ && copyfiles -u 1 dist/*Example.js* dist/examples/",
+    "examples:watch": "",
+    "jsdoc": "jsdoc --destination dist/api-doc -r src",
+    "lint": "jshint ./src ",
+    "test": "karma start --single-run",
+    "test:watch": "karma start --auto-watch",
+    "release": "npm run build && npm version patch",
+    "remove": "del-cli dist/*Example.js*",
+    "serve": "http-server ./dist/examples/",
+    "start": "npm run build && npm run serve",
+    "webpack": "webpack-cli --config webpack.config.js --mode production",
+    "webpack:watch": "webpack-cli --config webpack.config.js -w --mode development"
   },
   "repository": {
     "type": "git",
@@ -18,7 +29,7 @@
     "Earth Observation",
     "3D Globe"
   ],
-  "author": "Jakub Balhar, Yann Voumard, Florin Draghici, Servlet Giafher, Claudia Ifrim",
+  "author": "Jakub Balhar, Yann Voumard, Florin Draghici, Servet Giafher, Claudia Ifrim",
   "license": "APL-2.0",
   "bugs": {
     "url": "https://github.com/balhar-jakub/webworldwind-x/issues"
@@ -26,11 +37,25 @@
   "homepage": "https://github.com/balhar-jakub/webworldwind-x#readme",
   "devDependencies": {
     "@babel/core": "7.0.0",
+    "@babel/preset-env": "7.1.0",
     "babel-loader": "8.0.0",
+    "copyfiles": "2.1.0",
     "css-loader": "1.0.0",
+    "del-cli": "1.1.0",
+    "http-server": "0.11.1",
+    "jasmine": "3.2.0",
+    "jsdoc": "3.5.5",
+    "jshint": "2.9.6",
+    "karma": "3.0.0",
+    "karma-babel-preprocessor": "8.0.0-beta.0",
+    "karma-cli": "1.0.1",
+    "karma-jasmine": "1.1.2",
+    "karma-phantomjs-launcher": "1.0.4",
+    "karma-webpack": "3.0.5",
+    "parallelshell": "3.0.2",
+    "rimraf": "2.6.2",
     "webpack": "4.17.1",
-    "webpack-cli": "3.1.0",
-    "webpack-dev-server": "^3.1.7"
+    "webpack-cli": "3.1.0"
   },
   "dependencies": {
     "@nasaworldwind/worldwind": "0.9.0"

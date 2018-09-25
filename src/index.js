@@ -4,4 +4,4 @@ import LayerOrder from './util/LayerOrder';
 export default {
     CyclicPickController: CyclicPickController,
     LayerOrder: LayerOrder
-}
+};
