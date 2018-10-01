@@ -12,15 +12,15 @@ class LayerOrder {
      * @param {WorldWindow} wwd The world window instance.
      */
     constructor(wwd) {
-        var onFrameStart = function (wwd, stage) {
-            if (stage === WorldWind.BEFORE_REDRAW) {
-                wwd.layers.sort(function (a, b) {
-                    return a.zIndex - b.zIndex;
-                });
-            }
-        };
+        wwd.redrawCallbacks.push(LayerOrder.orderLayer);
+    }
 
-        wwd.redrawCallbacks.push(onFrameStart);
+    static orderLayer(wwd, stage) {
+        if (stage === WorldWind.BEFORE_REDRAW) {
+            wwd.layers.sort(function (a, b) {
+                return a.zIndex - b.zIndex;
+            });
+        }
     }
 }
 
