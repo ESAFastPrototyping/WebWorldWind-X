@@ -1,0 +1,172 @@
+html {
+    -webkit-box-sizing: border-box; /* Needed for mobile WebKit */
+    -moz-box-sizing: border-box; /* Needed for Firefox */
+    box-sizing: border-box;
+}
+
+*, *:before, *:after {
+    box-sizing: inherit;
+    margin: 0;
+    padding: 0;
+}
+
+.clearfix {
+    *zoom: 1;
+}
+
+.clearfix:before,
+.clearfix:after {
+    display: table;
+    content: "";
+    line-height: 0;
+}
+
+.clearfix:after {
+    clear: both;
+}
+
+/* ===== base typography ===== */
+html, body {
+    height: 100%;
+}
+
+html {
+    font-size: 100%;
+}
+
+body {
+    background: #000;
+    font-family: Open Sans, serif;
+    line-height: 1.5;
+    color: #ddd;
+    overflow: hidden;
+}
+
+h1, h2, h3, h4, h5 {
+    line-height: 1.2;
+}
+
+p, a {
+    font-size: 1.25rem;
+}
+
+p {
+    max-width: 40em;
+    margin-bottom: 1.875rem;
+}
+
+a, a:link {
+    color: #004eff;
+    cursor: pointer;
+}
+
+a:visited {
+    color: #0039bc;
+}
+
+a:hover, a:visited:hover {
+    color: #2f6eff;
+}
+
+a, a:link {
+    transition: color .2s ease-in-out,
+    background .2s ease-in-out;
+}
+
+.input-button-icon {
+    position: relative;
+}
+
+.input-button-icon input,
+.input-button-icon button {
+    height: 2rem;
+    border: 1px solid rgba(0, 0, 0, .2);
+
+    display: inline-block;
+}
+
+.input-button-icon input {
+    border-radius: .3rem;
+    padding: 0 2.5rem 0 .5rem;
+    display: inline-block;
+
+    width: 100%;
+
+    font-family: "Open Sans", serif;
+    font-size: 1rem;
+}
+
+.input-button-icon input::-webkit-input-placeholder {
+    color: #ddd;
+}
+
+.input-button-icon input::-moz-placeholder {
+    color: #ddd;
+}
+
+/* firefox 19+ */
+.input-button-icon input:-ms-input-placeholder {
+    color: #ddd;
+}
+
+/* ie */
+input:-moz-placeholder {
+    color: #ddd;
+}
+
+.input-button-icon button {
+    border-top-right-radius: .3rem;
+    border-bottom-right-radius: .3rem;
+
+    width: 2rem;
+
+    border-color: rgba(0, 0, 0, .18);
+    background: #fafafa;
+
+    cursor: pointer;
+
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.input-button-icon button:hover {
+    background: #f0f6ff;
+}
+
+.fa.radio {
+    margin-right: .5rem;
+}
+
+.fa.radio::before {
+    content: "\f1db";
+    color: #ccc;
+}
+
+.fa.radio.checked::before {
+    content: "\f058";
+    color: #71abff;
+}
+
+#globe, .overlay, .abs {
+    position: absolute;
+}
+
+#globe, .overlay, #canvasOne {
+    width: 100%;
+    height: 100%;
+}
+
+#globe {
+    overflow: hidden;
+    z-index: 10;
+}
+
+.hidden {
+    display: none;
+}
+
+#globe {
+    right: 0;
+    transition: width .3s ease-in-out;
+}

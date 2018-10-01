@@ -1,0 +1,242 @@
+.control {
+    background: rgba(255, 255, 255, 0.92);
+    border-radius: .3rem;
+    z-index: 15;
+    box-shadow: 0 0 .3rem 0 rgba(0, 0, 0, 0.3);
+    position: relative;
+
+    color: #666;
+}
+
+.control h3 {
+    font-size: 1rem;
+    line-height: 2rem;
+    padding: 0 .5rem;
+}
+
+.control.complex {
+    background: rgba(238, 238, 238, 0.92);
+}
+
+.control-group, #map-controls, .zoom-control, .tilt-control, .rotate-control {
+    position: absolute;
+}
+
+.menu-control {
+    width: 2rem;
+    height: 2rem;
+}
+
+#map-controls .control > a,
+.menu-control > a {
+    display: block;
+    width: 2rem;
+    height: 2rem;
+    text-align: center;
+    font-size: 1.125rem;
+    padding-top: .19rem;
+    color: #444;
+
+    transition: color .2s ease-in-out,
+    background .2s ease-in-out;
+}
+
+.menu-control > a {
+    border-radius: .3rem;
+}
+
+#map-controls .control > a:hover,
+.menu-control > a:hover {
+    background-color: rgba(255, 255, 255, .5);
+}
+
+#rotate-needle-control i {
+    transition: all .2s ease-in-out;
+    transform: rotate(-15deg);
+}
+
+#rotate-needle-control:hover i {
+    transform: rotate(-45deg);
+}
+
+.tilt-control a {
+    background-size: 1.2rem;
+    background: no-repeat center center;
+}
+
+@media screen and
+(orientation: portrait) {
+
+    .control-group {
+        top: .5rem;
+        left: .5rem;
+        right: .5rem;
+    }
+
+    #map-controls {
+        top: 0;
+        left: 0;
+        right: 2.5rem;
+    }
+
+    .zoom-control {
+        top: 0;
+        right: 0;
+    }
+
+    .rotate-control {
+        top: 0;
+        right: 4.5rem;
+    }
+
+    .tilt-control {
+        top: 0;
+        right: 11rem;
+    }
+
+    #map-controls .control {
+        height: 2rem;
+        width: 4rem;
+    }
+
+    #map-controls .rotate-control {
+        width: 6rem;
+    }
+
+    #map-controls .control > a,
+    .menu-control > a {
+        float: left;
+    }
+
+    #map-controls .control > a:first-child {
+        border-radius: .3rem 0 0 .3rem;
+    }
+
+    #map-controls .control > a:last-child {
+        border-radius: 0 .3rem .3rem 0;
+    }
+
+    #map-controls .control > a:not(:first-child) {
+        border-left: 1px solid rgba(0, 0, 0, .1);
+    }
+
+    #map-controls .control > a:not(:first-child):hover {
+        border-left: 1px solid rgba(0, 0, 0, .2);
+    }
+
+    #zoom-minus-control {
+        position: absolute;
+        left: 0;
+        border-radius: .3rem 0 0 .3rem;
+    }
+
+    #zoom-plus-control {
+        position: absolute;
+        right: 0;
+        border-radius: 0 .3rem .3rem 0;
+        border-left: 1px solid rgba(0, 0, 0, .1);
+    }
+
+    #zoom-plus-control:hover {
+        border-left: 1px solid rgba(0, 0, 0, .2);
+    }
+
+    #rotate-left-control {
+        position: absolute;
+        left: 0;
+        border-radius: .3rem 0 0 .3rem;
+    }
+
+    #rotate-needle-control {
+        position: absolute;
+        left: 2rem;
+    }
+
+    #rotate-right-control {
+        position: absolute;
+        right: 0;
+        border-radius: 0 .3rem .3rem 0;
+    }
+
+    #rotate-needle-control,
+    #rotate-right-control {
+        border-left: 1px solid rgba(0, 0, 0, .1);
+    }
+
+    #rotate-needle-control:hover,
+    #rotate-right-control:hover {
+        border-left: 1px solid rgba(0, 0, 0, .2);
+    }
+
+    #tilt-less-control {
+        position: absolute;
+        left: 0;
+        border-radius: .3rem 0 0 .3rem;
+    }
+
+    #tilt-more-control {
+        position: absolute;
+        right: 0;
+        border-radius: 0 .3rem .3rem 0;
+        border-left: 1px solid rgba(0, 0, 0, .1);
+    }
+
+    #tilt-more-control:hover {
+        border-left: 1px solid rgba(0, 0, 0, .2);
+    }
+}
+
+@media screen and
+(orientation: landscape) {
+
+    .control-group {
+        top: .5rem;
+        right: .5rem;
+        bottom: .5rem;
+    }
+
+    #map-controls {
+        top: 2.5rem;
+        right: 0;
+    }
+
+    .zoom-control {
+        top: 0;
+        right: 0;
+    }
+
+    .rotate-control {
+        top: 4.5rem;
+        right: 0;
+    }
+
+    .tilt-control {
+        top: 9rem;
+        right: 0;
+    }
+
+    #map-controls .control {
+        width: 2rem;
+        height: 4rem;
+    }
+
+    #map-controls .rotate-control {
+        height: 4rem;
+    }
+
+    #map-controls .control > a:first-child {
+        border-radius: .3rem .3rem 0 0;
+    }
+
+    #map-controls .control > a:last-child {
+        border-radius: 0 0 .3rem .3rem;
+    }
+
+    #map-controls .control > a:not(:first-child) {
+        border-top: 1px solid rgba(0, 0, 0, .1);
+    }
+
+    #map-controls .control > a:not(:first-child):hover {
+        border-top: 1px solid rgba(0, 0, 0, .2);
+    }
+}
