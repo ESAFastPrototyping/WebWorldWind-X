@@ -12,8 +12,28 @@
         <h1 style="text-align:center">Cyclic Pick Example</h1>
     </div>
     <div class="row">
-        <div class="col-sm-12" id="globe">
-            <canvas id="canvasOne" width="1000" height="1000" style="width: 100%; height: auto">
+        <div class="col-sm-3">
+            <h4>Projection</h4>
+            <div class="dropdown" id="projectionDropdown">
+            </div>
+            <br>
+            <h4>Layers</h4>
+            <div class="list-group" id="layerList">
+            </div>
+            <br>
+            <h4>Destination</h4>
+            <div class="input-group" id="searchBox">
+                <input type="text" class="form-control" placeholder="GoTo" id="searchText"/>
+                <span class="input-group-btn">
+                    <button id="searchButton" class="btn btn-primary" type="button">
+                        <span class="glyphicon glyphicon-search"></span>
+                    </button>
+                </span>
+            </div>
+        </div>
+        <div class="col-sm-9" id="globe">
+            <canvas id="canvasOne" width="1000" height="1000"
+                    style="width: 100%; height: auto; background-color: black;">
                 Your browser does not support HTML5 Canvas.
             </canvas>
         </div>

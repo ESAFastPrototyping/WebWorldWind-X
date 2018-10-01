@@ -7,7 +7,7 @@
     "build": "npm run clean && npm run lint && npm run test && npm run jsdoc && npm run webpack && npm run copy && npm run remove",
     "build:watch": "parallelshell 'npm run webpack:watch' 'npm run examples:watch'",
     "clean": "del-cli dist",
-    "copy": "copyfiles examples/*.html dist/ && copyfiles -u 1 dist/*Example.js* dist/examples/",
+    "copy": "copyfiles examples/*.html dist/ && copyfiles -u 1 dist/*Example.js* dist/examples/ && copyfiles -u 1 examples/images/* dist/examples && copyfiles -u 1 examples/images/view/* dist/examples",
     "examples:watch": "",
     "jsdoc": "jsdoc --destination dist/api-doc -r src",
     "lint": "jshint ./src ",

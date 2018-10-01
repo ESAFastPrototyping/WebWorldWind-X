@@ -16,8 +16,8 @@ Install [NodeJS](https://nodejs.org/en/). The build is known to work with v6.9.2
 - `npm run build` builds everything into the dist directory.
 - `npm run jsdoc` generates the API documentation into the dist/api-doc folder.
 - `npm run lint` process the files with the standard JsHint. 
-- `npm run test` runs karma tests in the PhantomJS browser and exits after the run.
+- `npm test` runs karma tests in the PhantomJS browser and exits after the run.
 - `npm run test:watch` runs karma tests in the watch mode meaning that on the change in the files, the tests are rerun. 
-- `npm run start` builds everything into the dist directory and starts the server with examples in the examples directory.
+- `npm start` builds everything into the dist directory and starts the server with examples in the examples directory.
 - `npm run release` publishes new version of the repository to the npm.
  

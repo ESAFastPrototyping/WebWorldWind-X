@@ -1,10 +1,6 @@
 import WorldWind from '@nasaworldwind/worldwind';
 import CyclicPickController from '../src/util/CyclicPickController';
-
-// TODO: Take visual structure from examples created by Tom.
-
-// Run server in the dist
-// TODO: SOme data
+import LayerManager from './LayerManager';
 
 WorldWind.Logger.setLoggingLevel(WorldWind.Logger.LEVEL_WARNING);
 
@@ -12,7 +8,7 @@ var wwd = new WorldWind.WorldWindow("canvasOne");
 wwd.deepPicking = true;
 
 var BMNGLayer = new WorldWind.BMNGLayer();
-var meshLayer = new WorldWind.RenderableLayer('meshLayer');
+var meshLayer = new WorldWind.RenderableLayer('Highlightable circles');
 
 var altitude1 = 100e3,
     altitude2 = altitude1 * 2,
@@ -102,6 +98,7 @@ wwd.addLayer(meshLayer);
 
 var events = ['click'];
 new CyclicPickController(wwd, events, onPickDone);
+new LayerManager(wwd);
 
 function onPickDone(renderables) {
     console.log(renderables);
