@@ -6,7 +6,9 @@ The internal structure of this repository copies the structure of the core repos
 
 ## Get started
 
-Explore the examples here in the examples directory. There is an example per module. To build and serve the examples run: npm start
+Explore the examples here in the examples directory. There is an example per module. To build and serve the examples run: `npm start`
+
+To see the examples in the action, they are deployed on: [GithubPages](https://worldwindlabs.github.io/WebWorldWind-X/) 
 
 ## Building
 
