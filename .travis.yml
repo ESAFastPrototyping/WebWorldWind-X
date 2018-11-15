@@ -1,0 +1,17 @@
+## Travis-CI YAML to publish webworldwind-x to GitHub Pages
+language: node_js
+node_js:
+  - "stable"
+cache:
+  directories:
+  - node_modules
+script:
+#  - npm test
+  - npm run build
+deploy:
+  provider: pages
+  skip_cleanup: true
+  github_token: $GITHUB_API_KEY
+  local_dir: build
+  on:
+branch: master
