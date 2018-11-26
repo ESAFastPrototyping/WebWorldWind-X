@@ -8,7 +8,7 @@
     "build:watch": "parallelshell 'npm run webpack:watch' 'npm run examples:watch'",
     "clean": "del-cli dist",
     "copy": "copyfiles examples/*.html dist/ && copyfiles -u 1 dist/*Example.js* dist/examples/ && copyfiles examples/*.png dist/ && copyfiles -u 1 examples/images/* dist/examples && copyfiles -u 1 examples/images/view/* dist/examples && copyfiles index.html dist/",
-    "examples:watch": "",
+    "examples:watch": "watch 'npm run build' ./examples",
     "jsdoc": "jsdoc --destination dist/api-doc -r src",
     "lint": "jshint ./src ",
     "test": "karma start --single-run",
@@ -57,6 +57,7 @@
     "karma-webpack": "3.0.5",
     "parallelshell": "3.0.2",
     "rimraf": "2.6.2",
+    "watch": "1.0.2",
     "webpack": "4.17.1",
     "webpack-cli": "3.1.0"
   },
