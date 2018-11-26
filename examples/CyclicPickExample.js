@@ -95,6 +95,8 @@ meshLayer.addRenderable(mesh3);
 
 wwd.addLayer(BMNGLayer);
 wwd.addLayer(meshLayer);
+wwd.addLayer(new WorldWind.CoordinatesDisplayLayer(wwd));
+wwd.addLayer(new WorldWind.ViewControlsLayer(wwd));
 
 var events = ['click'];
 new CyclicPickController(wwd, events, onPickDone);
