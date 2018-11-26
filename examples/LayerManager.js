@@ -37,7 +37,7 @@ class LayerManager {
 
         this.synchronizeLayerList();
 
-        $("#searchBox").find("button").on("click", function (e) {
+        $("#searchButton").on("click", function (e) {
             thisExplorer.onSearchButton(e);
         });
 
@@ -126,16 +126,8 @@ class LayerManager {
             if (layer.hide) {
                 continue;
             }
-            var layerItem = $('<button class="list-group-item btn btn-block">' + layer.displayName + '</button>');
+            var layerItem = $('<button class="list-group-item btn btn-primary">' + layer.displayName + '</button>');
             layerListItem.append(layerItem);
-
-            if (layer.showSpinner && Spinner) {
-                var opts = {
-                    scale: 0.9,
-                };
-                var spinner = new Spinner(opts).spin();
-                layerItem.append(spinner.el);
-            }
 
             if (layer.enabled) {
                 layerItem.addClass("active");
@@ -167,11 +159,11 @@ class LayerManager {
         var dropdownButton = $('<button class="btn btn-info btn-block dropdown-toggle" type="button" data-toggle="dropdown">3D<span class="caret"></span></button>');
         projectionDropdown.append(dropdownButton);
 
-        var ulItem = $('<ul class="dropdown-menu">');
+        var ulItem = $('<ul class="dropdown-menu list-group">');
         projectionDropdown.append(ulItem);
 
         for (var i = 0; i < projectionNames.length; i++) {
-            var projectionItem = $('<li><a >' + projectionNames[i] + '</a></li>');
+            var projectionItem = $('<li class="list-group-item" style="cursor: pointer;"><a >' + projectionNames[i] + '</a></li>');
             ulItem.append(projectionItem);
         }
 

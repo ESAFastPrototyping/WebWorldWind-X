@@ -15,7 +15,7 @@
     "test:watch": "karma start --auto-watch",
     "release": "npm run build && npm version:minor && npm publish",
     "remove": "del-cli dist/*Example.js*",
-    "serve": "http-server ./dist/examples/",
+    "serve": "http-server ./dist/",
     "start": "npm run build && npm run serve",
     "version:major": "npm version major",
     "version:minor": "npm version minor",

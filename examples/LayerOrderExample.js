@@ -12,7 +12,6 @@ var layers = [
     {layer: new WorldWind.BingAerialLayer(null), enabled: true, zIndex: 80},
     {layer: new WorldWind.BingAerialWithLabelsLayer(null), enabled: true, zIndex: 70},
     {layer: new WorldWind.BingRoadsLayer(null), enabled: true, zIndex: 60},
-    {layer: new WorldWind.CompassLayer(), enabled: true, zIndex: 50},
     {layer: new WorldWind.CoordinatesDisplayLayer(wwd), enabled: true, zIndex: 40},
     {layer: new WorldWind.ViewControlsLayer(wwd), enabled: true, zIndex: 30}
 ];
