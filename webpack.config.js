@@ -4,7 +4,8 @@ module.exports = {
     entry: {
         main: './src/index.js',
         CyclicPickExample: './examples/CyclicPickExample.js',
-        LayerOrderExample: './examples/LayerOrderExample.js'
+        LayerOrderExample: './examples/LayerOrderExample.js',
+        TexturedSurfacePolygonExample: './examples/TexturedSurfacePolygonExample.js'
     },
     devtool: 'source-map',
     output: {
