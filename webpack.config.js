@@ -3,6 +3,7 @@ const path = require('path');
 module.exports = {
     entry: {
         main: './src/index.js',
+        ControlsExample: './examples/ControlsExample.js',
         CyclicPickExample: './examples/CyclicPickExample.js',
         LayerOrderExample: './examples/LayerOrderExample.js',
         TexturedSurfacePolygonExample: './examples/TexturedSurfacePolygonExample.js'
@@ -14,7 +15,7 @@ module.exports = {
     },
     module: {
         rules: [
-            {test: /\.css$/, use: 'css-loader'},
+            {test: /\.css$/, use: ['style-loader','css-loader']},
             {
                 test: /\.(js|jsx)$/,
                 exclude: /node_modules/,

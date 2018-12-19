@@ -1,0 +1,106 @@
+.control {
+    background: rgba(255, 255, 255, 0.85);
+    border-radius: .3rem;
+    z-index: 15;
+    box-shadow: 0 0 0.3rem 0 rgba(0, 0, 0, 0.3);
+    margin-bottom: 7px;
+}
+
+.map-controls {
+    position: absolute;
+    bottom: 20px;
+    right: 7px;
+    z-index: 3;
+}
+.map-controls.small {
+    bottom: 13px;
+}
+.map-controls.small .control {
+    margin-bottom: 5px;
+}
+
+.map-controls .control > a,
+.menu-control > a {
+    display: block;
+    width: 2rem;
+    height: 2rem;
+    text-align: center;
+    font-size: 1.125rem;
+    padding-top: .19rem;
+    color: #666;
+
+    transition:
+            color .2s ease-in-out,
+            background .2s ease-in-out;
+}
+
+.map-controls.small .control > a {
+    width: 1.6rem;
+    height: 1.6rem;
+    font-size: .975rem;
+}
+
+.menu-control > a {
+    border-radius: .3rem;
+}
+
+.map-controls .control > a:not(:first-child) {
+    border-top: 1px solid rgba(0, 0, 0, .1);
+}
+
+.map-controls .control > a:hover,
+.menu-control > a:hover {
+    background-color: rgba(255, 255, 255, .5);
+    color: #c92d42;
+}
+
+.rotate-needle-control i {
+    -webkit-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+}
+
+.tilt-control a {
+    background-size: 1.2rem;
+    background: no-repeat center center;
+}
+
+.tilt-more-control svg,
+.tilt-less-control svg,
+.rotate-right-control svg,
+.rotate-left-control svg,
+.rotate-needle-control svg,
+.zoom-minus-control svg,
+.zoom-plus-control svg,
+.exaggerate-plus-control svg,
+.exaggerate-minus-control svg {
+    margin-top: 0;
+    width: 1.125rem;
+    height: 1.125rem;
+}
+
+.tilt-more-control svg path,
+.tilt-less-control svg path,
+.rotate-right-control svg path,
+.rotate-left-control svg path,
+.rotate-needle-control svg path,
+.zoom-minus-control svg path,
+.zoom-plus-control svg path,
+.exaggerate-plus-control svg path,
+.exaggerate-minus-control svg path {
+    fill: #666;
+
+    transition:
+            fill .2s ease-in-out;
+}
+
+.tilt-more-control:hover svg path,
+.tilt-less-control:hover svg path,
+.rotate-right-control:hover svg path,
+.rotate-left-control:hover svg path,
+.rotate-needle-control:hover svg path,
+.zoom-minus-control:hover svg path,
+.zoom-plus-control:hover svg path,
+.exaggerate-plus-control:hover svg path,
+.exaggerate-minus-control:hover svg path {
+    fill: #c92d42;
+}
