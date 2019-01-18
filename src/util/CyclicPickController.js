@@ -20,7 +20,7 @@ class CyclicPickController {
         });
     }
 
-    eventListener(wwd, cb) {
+    eventListener(wwd, cb, event) {
         const x = event.clientX,
             y = event.clientY;
 

@@ -14,3 +14,5 @@ new Controls({
 });
 
 new LayerManager(wwd);
+
+document.querySelector('#canvasOne').height = (window.innerHeight - 55);

@@ -2,12 +2,12 @@ import WorldWind from '@nasaworldwind/worldwind';
 import CyclicPickController from '../src/util/CyclicPickController';
 import LayerManager from './LayerManager';
 
+WorldWind.configuration.baseUrl = '/examples/';
 WorldWind.Logger.setLoggingLevel(WorldWind.Logger.LEVEL_WARNING);
 
 var wwd = new WorldWind.WorldWindow("canvasOne");
 wwd.deepPicking = true;
 
-var BMNGLayer = new WorldWind.BMNGLayer();
 var meshLayer = new WorldWind.RenderableLayer('Highlightable circles');
 
 var altitude1 = 100e3,
@@ -79,12 +79,16 @@ mesh.textureCoordinates = texCoords;
 mesh.outlineIndices = outlineIndices;
 mesh.highlightAttributes = highlightAttributes;
 
-var mesh2 = new WorldWind.TriangleMesh(mesh2Positions, meshIndices, meshAttributes);
+var mesh2Attributes = new WorldWind.ShapeAttributes(meshAttributes);
+mesh2Attributes.interiorColor = new WorldWind.Color(1, 0, 0, 0.7);
+var mesh2 = new WorldWind.TriangleMesh(mesh2Positions, meshIndices, mesh2Attributes);
 mesh2.textureCoordinates = texCoords;
 mesh2.outlineIndices = outlineIndices;
 mesh2.highlightAttributes = highlightAttributes;
 
-var mesh3 = new WorldWind.TriangleMesh(mesh3Positions, meshIndices, meshAttributes);
+var mesh3Attributes = new WorldWind.ShapeAttributes(meshAttributes);
+mesh3Attributes.interiorColor = new WorldWind.Color(0, 1, 0, 0.7);
+var mesh3 = new WorldWind.TriangleMesh(mesh3Positions, meshIndices, mesh3Attributes);
 mesh3.textureCoordinates = texCoords;
 mesh3.outlineIndices = outlineIndices;
 mesh3.highlightAttributes = highlightAttributes;
@@ -93,10 +97,18 @@ meshLayer.addRenderable(mesh);
 meshLayer.addRenderable(mesh2);
 meshLayer.addRenderable(mesh3);
 
-wwd.addLayer(BMNGLayer);
-wwd.addLayer(meshLayer);
-wwd.addLayer(new WorldWind.CoordinatesDisplayLayer(wwd));
-wwd.addLayer(new WorldWind.ViewControlsLayer(wwd));
+var layers = [
+    {layer: new WorldWind.BMNGLayer(), enabled: true},
+    {layer: meshLayer, enabled: true},
+    {layer: new WorldWind.CoordinatesDisplayLayer(wwd), enabled: true},
+    {layer: new WorldWind.ViewControlsLayer(wwd), enabled: true}
+];
+
+for (var l = 0; l < layers.length; l++) {
+    layers[l].layer.enabled = layers[l].enabled;
+    layers[l].layer.zIndex = layers[l].zIndex;
+    wwd.addLayer(layers[l].layer);
+}
 
 var events = ['click'];
 new CyclicPickController(wwd, events, onPickDone);
@@ -105,3 +117,5 @@ new LayerManager(wwd);
 function onPickDone(renderables) {
     console.log(renderables);
 }
+
+document.querySelector('#canvasOne').height = (window.innerHeight - 55);
