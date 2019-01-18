@@ -3,6 +3,8 @@ import WorldWind from '@nasaworldwind/worldwind';
 import Controls from '../src/view/Controls';
 import LayerManager from './LayerManager';
 
+document.querySelector('#canvasOne').height = (window.innerHeight - 55);
+
 WorldWind.configuration.baseUrl = '/examples/';
 const wwd = new WorldWind.WorldWindow("canvasOne");
 
@@ -14,5 +16,3 @@ new Controls({
 });
 
 new LayerManager(wwd);
-
-document.querySelector('#canvasOne').height = (window.innerHeight - 55);

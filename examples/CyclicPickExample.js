@@ -2,6 +2,8 @@ import WorldWind from '@nasaworldwind/worldwind';
 import CyclicPickController from '../src/util/CyclicPickController';
 import LayerManager from './LayerManager';
 
+document.querySelector('#canvasOne').height = (window.innerHeight - 55);
+
 WorldWind.configuration.baseUrl = '/examples/';
 WorldWind.Logger.setLoggingLevel(WorldWind.Logger.LEVEL_WARNING);
 
@@ -117,5 +119,3 @@ new LayerManager(wwd);
 function onPickDone(renderables) {
     console.log(renderables);
 }
-
-document.querySelector('#canvasOne').height = (window.innerHeight - 55);

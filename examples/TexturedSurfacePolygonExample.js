@@ -3,6 +3,8 @@ import WorldWind from '@nasaworldwind/worldwind';
 import LayerManager from './LayerManager';
 import TexturedSurfacePolygon from '../src/shapes/TexturedSurfacePolygon';
 
+document.querySelector('#canvasOne').height = (window.innerHeight - 55);
+
 WorldWind.configuration.baseUrl = '/examples/';
 const wwd = new WorldWind.WorldWindow("canvasOne");
 
@@ -35,5 +37,3 @@ for (let l = 0; l < layers.length; l++) {
 }
 
 new LayerManager(wwd);
-
-document.querySelector('#canvasOne').height = (window.innerHeight - 55);

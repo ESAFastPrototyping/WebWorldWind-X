@@ -2,6 +2,8 @@ import WorldWind from '@nasaworldwind/worldwind';
 import LayerOrder from '../src/util/LayerOrder';
 import LayerManager from './LayerManager';
 
+document.querySelector('#canvasOne').height = (window.innerHeight - 55);
+
 WorldWind.configuration.baseUrl = '/examples/';
 const wwd = new WorldWind.WorldWindow("canvasOne");
 
@@ -24,5 +26,3 @@ for (var l = 0; l < layers.length; l++) {
 }
 
 new LayerManager(wwd);
-
-document.querySelector('#canvasOne').height = (window.innerHeight - 55);
