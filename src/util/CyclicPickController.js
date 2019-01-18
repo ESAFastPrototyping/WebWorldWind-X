@@ -21,8 +21,8 @@ class CyclicPickController {
     }
 
     eventListener(wwd, cb, event) {
-        const x = event.clientX,
-            y = event.clientY;
+        const x = event.touches && event.touches[0] && event.touches[0].clientX || event.clientX,
+            y = event.touches && event.touches[0] && event.touches[0].clientY || event.clientY;
 
         const pickList = wwd.pick(wwd.canvasCoordinates(x, y));
         const highlightedRenderables = this.setNextHighlightStage(pickList.objects);
