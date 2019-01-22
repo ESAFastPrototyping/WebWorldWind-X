@@ -13,7 +13,7 @@ if(testForMobile()) {
 }
 
 
-WorldWind.configuration.baseUrl = '/examples/';
+WorldWind.configuration.baseUrl = window.location.pathname.replace('LayerOrderExample.html');
 const wwd = new WorldWind.WorldWindow("canvasOne");
 
 new LayerOrder(wwd);

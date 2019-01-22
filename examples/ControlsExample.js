@@ -14,7 +14,7 @@ if(testForMobile()) {
 }
 
 
-WorldWind.configuration.baseUrl = '/examples/';
+WorldWind.configuration.baseUrl = window.location.pathname.replace('ControlsExample.html');
 const wwd = new WorldWind.WorldWindow("canvasOne");
 
 wwd.addLayer(new WorldWind.BMNGLayer());

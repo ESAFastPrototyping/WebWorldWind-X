@@ -14,7 +14,7 @@ if(testForMobile()) {
 }
 
 
-WorldWind.configuration.baseUrl = '/examples/';
+WorldWind.configuration.baseUrl = window.location.pathname.replace('TexturedSurfacePolygonExample.html');
 const wwd = new WorldWind.WorldWindow("canvasOne");
 
 const layerWithTexturedSurfacePolygon = new WorldWind.RenderableLayer('Textured Surface Polygon');
