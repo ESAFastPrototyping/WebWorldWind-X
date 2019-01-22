@@ -39,3 +39,5 @@ new LayerManager(wwd);
 if(!testForMobile()) {
     document.querySelector('#canvasOne').height = (window.innerHeight - 55);
 }
+
+document.querySelector('#searchText').blur();
