@@ -12,7 +12,7 @@ if(testForMobile()) {
     document.querySelector('#canvasOne').height = (window.innerHeight - 55);
 }
 
-WorldWind.configuration.baseUrl = window.location.pathname.replace('CyclicPickExample.html');
+WorldWind.configuration.baseUrl = window.location.pathname.replace('CyclicPickExample.html', '');
 WorldWind.Logger.setLoggingLevel(WorldWind.Logger.LEVEL_WARNING);
 
 var wwd = new WorldWind.WorldWindow("canvasOne");
