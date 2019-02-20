@@ -172,13 +172,13 @@ class LayerManager {
     }
 
     onSearchButton(event) {
-        this.performSearch($("#searchText")[0].value)
+        this.performSearch($("#searchText")[0].innerHTML)
     }
 
     onSearchTextKeyPress(searchInput, event) {
         if (event.keyCode === 13) {
             searchInput.blur();
-            this.performSearch($("#searchText")[0].value)
+            this.performSearch($("#searchText")[0].innerHTML)
         }
     }
 
