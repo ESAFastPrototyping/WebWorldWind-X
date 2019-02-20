@@ -30,7 +30,7 @@ class Controls {
             this._mapContainer = document.querySelector('#' + options.mapContainerId);
         }
 
-        this._classes = options.classes || [];
+        this._classes = options.classes || ['bottom-right'];
 
         /**
          * The World Window associated with controls.

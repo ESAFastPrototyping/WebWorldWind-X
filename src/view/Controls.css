@@ -8,9 +8,18 @@
 
 .map-controls {
     position: absolute;
+    z-index: 3;
+}
+
+.map-controls.bottom-right {
     bottom: 20px;
     right: 7px;
-    z-index: 3;
+}
+
+.map-controls.top-right {
+    position: absolute;
+    top: 20px;
+    right: 7px;
 }
 .map-controls.small {
     bottom: 13px;
