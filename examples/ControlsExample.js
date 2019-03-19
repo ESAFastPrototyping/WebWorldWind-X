@@ -15,5 +15,3 @@ new Controls({
 });
 
 new LayerManager(wwd);
-
-document.querySelector('#searchText').blur();

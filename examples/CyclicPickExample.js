@@ -117,5 +117,3 @@ new LayerManager(wwd);
 function onPickDone(renderables) {
     console.log(renderables);
 }
-
-document.querySelector('#searchText').blur();

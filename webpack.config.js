@@ -3,6 +3,7 @@ const path = require('path');
 module.exports = {
     entry: {
         main: './src/index.js',
+        Base64ImageExample: './examples/Base64ImageExample.js',
         ControlsExample: './examples/ControlsExample.js',
         CyclicPickExample: './examples/CyclicPickExample.js',
         LayerOrderExample: './examples/LayerOrderExample.js',
