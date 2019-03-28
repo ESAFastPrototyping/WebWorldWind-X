@@ -1,4 +1,4 @@
-import WorldWind from '@nasaworldwind/worldwind';
+import WorldWind from 'webworldwind-esa';
 import LayerOrder from '../../src/util/LayerOrder';
 
 describe('LayerOrder', () => {

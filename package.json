@@ -7,7 +7,7 @@
     "build": "npm run clean && npm run lint && npm run test && npm run jsdoc && npm run webpack && npm run copy && npm run remove",
     "build:watch": "parallelshell 'npm run webpack:watch' 'npm run examples:watch'",
     "clean": "del-cli dist",
-    "copy": "copyfiles examples/*.html dist/ && copyfiles -u 1 dist/*Example.js* dist/examples/ && copyfiles examples/*.png dist/ && copyfiles -u 1 examples/images/* dist/examples && copyfiles -u 1 examples/images/view/* dist/examples && copyfiles index.html dist/ && copyfiles examples/*.css dist/",
+    "copy": "copyfiles examples/*.html dist/ && copyfiles -u 1 dist/*Example.js* dist/examples/ && copyfiles examples/*.png dist/ && copyfiles -u 1 examples/images/* dist/examples && copyfiles -u 1 examples/images/view/* dist/examples && copyfiles index.html dist/ && copyfiles examples/*.css dist/ && copyfiles examples/data/* dist/",
     "examples:watch": "watch 'npm run build' ./examples",
     "jsdoc": "jsdoc --destination dist/api-doc -r src",
     "lint": "jshint ./src ",
@@ -63,6 +63,6 @@
     "webpack-cli": "3.1.0"
   },
   "dependencies": {
-    "@nasaworldwind/worldwind": "0.9.0"
+    "webworldwind-esa": "0.10.0-alpha.2"
   }
 }

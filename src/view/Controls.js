@@ -1,4 +1,4 @@
-import WorldWind from '@nasaworldwind/worldwind';
+import WorldWind from 'webworldwind-esa';
 import './Controls.css';
 
 const ArgumentError = WorldWind.ArgumentError,

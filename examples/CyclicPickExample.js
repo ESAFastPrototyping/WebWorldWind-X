@@ -1,4 +1,4 @@
-import WorldWind from '@nasaworldwind/worldwind';
+import WorldWind from 'webworldwind-esa';
 import CyclicPickController from '../src/util/CyclicPickController';
 import LayerManager from './LayerManager';
 

@@ -1,4 +1,4 @@
-import WorldWind from '@nasaworldwind/worldwind';
+import WorldWind from 'webworldwind-esa';
 import TexturedSurfaceShape from './TexturedSurfaceShape';
 
 const SurfacePolygon = WorldWind.SurfacePolygon;

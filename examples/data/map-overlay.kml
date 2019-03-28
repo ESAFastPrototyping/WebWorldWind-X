@@ -7,10 +7,10 @@
       <GroundOverlay>
         <name>Sentinel-1 Image Overlay</name>
         <Icon>
-          <href>quick-look.png</href>
+          <href>data/quick-look.png</href>
         </Icon>
         <gx:LatLonQuad>
-          <coordinates>-72.706787,-53.789604 -76.530289,-52.866978 -75.653923,-51.596043 -71.931122,-52.493065</coordinates>
+          <coordinates>-68.510620,-2.301279 -70.733482,-1.816852 -70.375458,-0.135955 -68.154594,-0.614848</coordinates>
         </gx:LatLonQuad>
       </GroundOverlay>
     </Folder>

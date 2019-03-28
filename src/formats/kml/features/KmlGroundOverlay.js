@@ -1,9 +1,10 @@
-import WorldWind from '@nasaworldwind/worldwind';
+import WorldWind from 'webworldwind-esa';
 import TexturedSurfacePolygon from '../../../shapes/TexturedSurfacePolygon';
 
 const KmlGroundOverlay = WorldWind.KmlGroundOverlay,
     Location = WorldWind.Location,
     Sector = WorldWind.Sector,
+    ShapeAttributes = WorldWind.ShapeAttributes,
     SurfaceImage = WorldWind.SurfaceImage;
 
 /**
@@ -24,7 +25,7 @@ class KmlGroundOverlayFull extends KmlGroundOverlay {
         super.render(dc, kmlOptions);
 
         if(!this._renderable && this.enabled) {
-            if(this.kmlIcon && this.kmlLatLonBox) {
+            if(this.kmlIcon) {
                 if(this.kmlLatLonBox) {
                     this._renderable = new SurfaceImage(
                         new Sector(
@@ -39,13 +40,13 @@ class KmlGroundOverlayFull extends KmlGroundOverlay {
                     const coordinates = this.kmlLatLonQuad.kmlCoordinates.split(' ');
                     const boundaries = coordinates.map(coordinates => {
                         const coordinate = coordinates.split(',');
-                        return new Location(coordinate[0], coordinate[1]);
+                        return new Location(coordinate[1], coordinate[0]);
                     });
 
                     const texture = new Image();
                     texture.src = this.kmlIcon.kmlHref(kmlOptions.fileCache);
 
-                    this._renderable = new TexturedSurfacePolygon(boundaries);
+                    this._renderable = new TexturedSurfacePolygon(boundaries, new ShapeAttributes());
                     this._renderable.image = texture;
                 }
 

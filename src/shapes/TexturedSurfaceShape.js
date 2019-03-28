@@ -1,4 +1,4 @@
-import WorldWind from '@nasaworldwind/worldwind';
+import WorldWind from 'webworldwind-esa';
 
 const PickedObject = WorldWind.PickedObject,
     SurfacePolygon = WorldWind.SurfacePolygon,
@@ -78,13 +78,13 @@ class TexturedSurfaceShape extends SurfaceShape {
         if (this.crossesAntiMeridian || this.containsPole) {
             if (drawInterior) {
                 this.draw(this._interiorGeometry, ctx2D, xScale, yScale, dx, dy);
-                ctx2D.fillStyle = dc.pickingMode ? pickColor : attributes.interiorColor.toRGBAString();
+                ctx2D.fillStyle = dc.pickingMode ? pickColor : attributes.interiorColor.toCssColorString();
                 ctx2D.fill();
             }
             if (drawOutline) {
                 this.draw(this._outlineGeometry, ctx2D, xScale, yScale, dx, dy);
                 ctx2D.lineWidth = attributes.outlineWidth;
-                ctx2D.strokeStyle = dc.pickingMode ? pickColor : attributes.outlineColor.toRGBAString();
+                ctx2D.strokeStyle = dc.pickingMode ? pickColor : attributes.outlineColor.toCssColorString();
                 ctx2D.stroke();
             }
         } else {
@@ -103,13 +103,13 @@ class TexturedSurfaceShape extends SurfaceShape {
                     ctx2D.restore();
                 }
                 else {
-                    ctx2D.fillStyle = dc.pickingMode ? pickColor : attributes.interiorColor.toRGBAString();
+                    ctx2D.fillStyle = dc.pickingMode ? pickColor : attributes.interiorColor.toCssColorString();
                     ctx2D.fill();
                 }
             }
             if (drawOutline) {
                 ctx2D.lineWidth = attributes.outlineWidth;
-                ctx2D.strokeStyle = dc.pickingMode ? pickColor : attributes.outlineColor.toRGBAString();
+                ctx2D.strokeStyle = dc.pickingMode ? pickColor : attributes.outlineColor.toCssColorString();
                 ctx2D.stroke();
             }
         }

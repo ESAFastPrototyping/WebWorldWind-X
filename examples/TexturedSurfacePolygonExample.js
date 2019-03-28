@@ -1,4 +1,4 @@
-import WorldWind from '@nasaworldwind/worldwind';
+import WorldWind from 'webworldwind-esa';
 
 import LayerManager from './LayerManager';
 import TexturedSurfacePolygon from '../src/shapes/TexturedSurfacePolygon';
