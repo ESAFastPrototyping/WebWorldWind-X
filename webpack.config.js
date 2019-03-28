@@ -6,6 +6,7 @@ module.exports = {
         Base64ImageExample: './examples/Base64ImageExample.js',
         ControlsExample: './examples/ControlsExample.js',
         CyclicPickExample: './examples/CyclicPickExample.js',
+        KmlGroundOverlayExample: './examples/KmlGroundOverlayExample.js',
         LayerOrderExample: './examples/LayerOrderExample.js',
         TexturedSurfacePolygonExample: './examples/TexturedSurfacePolygonExample.js'
     },
