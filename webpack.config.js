@@ -5,6 +5,7 @@ module.exports = {
         main: './src/index.js',
         Base64ImageExample: './examples/Base64ImageExample.js',
         ControlsExample: './examples/ControlsExample.js',
+        CogExample: './examples/CogExample.js',
         CyclicPickExample: './examples/CyclicPickExample.js',
         KmlGroundOverlayExample: './examples/KmlGroundOverlayExample.js',
         LayerOrderExample: './examples/LayerOrderExample.js',
@@ -29,5 +30,8 @@ module.exports = {
                 }
             }
         ]
+    },
+    node: {
+        fs: 'empty'
     }
 };
