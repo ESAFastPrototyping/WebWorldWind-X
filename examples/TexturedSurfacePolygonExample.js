@@ -1,6 +1,7 @@
 import WorldWind from 'webworldwind-esa';
 
 import LayerManager from './LayerManager';
+import SentinelCloudlessLayer from '../src/layer/SentinelCloudlessLayer';
 import TexturedSurfacePolygon from '../src/shapes/TexturedSurfacePolygon';
 
 WorldWind.configuration.baseUrl = window.location.pathname.replace('TexturedSurfacePolygonExample.html', '');
@@ -9,7 +10,7 @@ const wwd = new WorldWind.WorldWindow("canvasOne");
 const layerWithTexturedSurfacePolygon = new WorldWind.RenderableLayer('Textured Surface');
 const layers = [
     {layer: layerWithTexturedSurfacePolygon, enabled: true},
-    {layer: new WorldWind.BMNGLayer(), enabled: true},
+    {layer: new SentinelCloudlessLayer(), enabled: true},
     {layer: new WorldWind.CoordinatesDisplayLayer(wwd), enabled: true},
     {layer: new WorldWind.ViewControlsLayer(wwd), enabled: true}
 ];

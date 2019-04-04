@@ -1,5 +1,6 @@
 import WorldWind from 'webworldwind-esa';
 
+import SentinelCloudlessLayer from '../src/layer/SentinelCloudlessLayer';
 import LayerManager from './LayerManager';
 
 WorldWind.configuration.baseUrl = window.location.pathname.replace('Base64ImageExample.html', '');
@@ -8,7 +9,7 @@ const wwd = new WorldWind.WorldWindow("canvasOne");
 wwd.navigator.range = 1000000;
 wwd.navigator.lookAtLocation = new WorldWind.Location(50, 20);
 
-wwd.addLayer(new WorldWind.BMNGLayer());
+wwd.addLayer(new SentinelCloudlessLayer());
 
 
 const placemarkAttributes = new WorldWind.PlacemarkAttributes();

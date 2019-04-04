@@ -1,5 +1,6 @@
 import WorldWind from 'webworldwind-esa';
 import LayerOrder from '../src/util/LayerOrder';
+import SentinelCloudlessLayer from '../src/layer/SentinelCloudlessLayer';
 import LayerManager from './LayerManager';
 
 WorldWind.configuration.baseUrl = window.location.pathname.replace('LayerOrderExample.html', '');
@@ -8,8 +9,7 @@ const wwd = new WorldWind.WorldWindow("canvasOne");
 new LayerOrder(wwd);
 
 var layers = [
-    {layer: new WorldWind.BMNGLayer(), enabled: true, zIndex: 100},
-    {layer: new WorldWind.BMNGLandsatLayer(), enabled: true, zIndex: 90},
+    {layer: new SentinelCloudlessLayer(), enabled: true, zIndex: 100},
     {layer: new WorldWind.BingAerialLayer(null), enabled: true, zIndex: 80},
     {layer: new WorldWind.BingAerialWithLabelsLayer(null), enabled: true, zIndex: 70},
     {layer: new WorldWind.BingRoadsLayer(null), enabled: true, zIndex: 60},
