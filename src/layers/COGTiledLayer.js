@@ -1,17 +1,27 @@
 import WorldWind from 'webworldwind-esa';
-import {fromUrl} from 'geotiff/src/main';
+import proj4 from "proj4";
 
-const Location = WorldWind.Locations,
-    Sector = WorldWind.Sector,
+const Sector = WorldWind.Sector,
     TiledImageLayer = WorldWind.TiledImageLayer,
     WWUtil = WorldWind.WWUtil;
 
 class COGTiledLayer extends TiledImageLayer {
-    constructor(geoTiff, increment, sector, numLevels, resolutions) {
-        super(sector, increment, numLevels, 'image/png', 'COGTiledLayer ' + WWUtil.guid(), 256, 256);
+    constructor(geoTiff, levelZeroDelta, sector, numLevels, resolutionX, resolutionY, tileHeight, tileWidth, crs) {
+        super(sector, levelZeroDelta, numLevels, 'image/png', 'COGTiledLayer ' + WWUtil.guid(), tileWidth, tileHeight);
+
+        console.log(sector, levelZeroDelta, numLevels, tileWidth, tileHeight);
 
         this.geoTiff = geoTiff;
-        this.resolutions = resolutions;
+        this.resX = resolutionX;
+        this.resY = resolutionY;
+        this.amounOfLevels = numLevels;
+
+        console.log('CRS: ', crs);
+        // Projection URL.
+        if(crs) {
+            this.sourceProjection = crs;
+            this.targetProjection = 'EPSG:4326';
+        }
     }
 
     /**
@@ -27,35 +37,61 @@ class COGTiledLayer extends TiledImageLayer {
                 cache = dc.gpuResourceCache,
                 layer = this;
 
-            const resolution = this.resolutions[tile.level.levelNumber];
-            const sector = tile.sector;
+            let sector = tile.sector;
+            const currentLevel = this.amounOfLevels - tile.level.levelNumber - 1;
+
+            if(this.sourceProjection) {
+                const min = proj4(this.targetProjection, this.sourceProjection, [sector.minLongitude, sector.minLatitude]);
+                const max = proj4(this.targetProjection, this.sourceProjection,[sector.maxLongitude, sector.maxLatitude]);
+
+                sector = new Sector(
+                    min[1],
+                    max[1],
+                    min[0],
+                    max[0]
+                );
+            }
+
             // bbox is based on the current data
             this.geoTiff.readRasters({
                 bbox: [
-                    sector.minLatitude,
                     sector.minLongitude,
-                    sector.maxLatitude,
-                    sector.maxLongitude
+                    sector.minLatitude,
+                    sector.maxLongitude,
+                    sector.maxLatitude
                 ],
-                resX: resolution.x,
-                resY: resolution.y
+                resX: this.resX * Math.pow(2, currentLevel),
+                resY: this.resY * Math.pow(2, currentLevel)
             }).then(result => {
-                const tileImage = new Image();
+                console.log(result);
 
-                const canvas = document.createElement('canvas');
-                canvas.width = width;
-                canvas.height = height;
-
-                const ctx2d = canvas.getContext('2d');
-                const rBand = result[0];
-                const gBand = result[1];
-                const bBand = result[2];
-
-                // Reproject to relevant projection from WGS84.
-
+                let rBand, gBand, bBand;
                 // Draw the bands into the canvas.
+                if(result.length === 1) {
+                    rBand = result[0];
+                    gBand = result[0];
+                    bBand = result[0];
+                } else {
+                    rBand = result[0];
+                    gBand = result[1];
+                    bBand = result[2];
+                }
 
-                var texture = layer.createTexture(dc, tile, tileImage);
+                const dataArray = [];
+                rBand.forEach((red, index) => {
+                    dataArray.push(red, gBand[index], bBand[index], 255);
+                });
+                const dataForCanvas = Uint8ClampedArray.from(dataArray);
+
+                const imageData = new ImageData(dataForCanvas, result.width, result.height);
+                const canvas = document.createElement('canvas');
+                canvas.width = result.width;
+                canvas.height = result.height;
+
+                const context2D = canvas.getContext('2d');
+                context2D.putImageData(imageData, 0, 0);
+
+                var texture = layer.createTexture(dc, tile, canvas);
                 layer.removeFromCurrentRetrievals(imagePath);
 
                 if (texture) {
@@ -73,35 +109,6 @@ class COGTiledLayer extends TiledImageLayer {
                 }
             });
         }
-    }
-
-    static async fromUrl(url) {
-        const geoTiff = await fromUrl(url);
-        const numLevels = await geoTiff.getImageCount();
-        const image = await geoTiff.getImage();
-        const boundingBox = await image.getBoundingBox();
-
-        // Build resolutions.
-        const resolutions = [];
-        resolutions[0] = {
-            x: (boundingBox[2] - boundingBox[0]) / image.getWidth(),
-            y: (boundingBox[3] - boundingBox[1]) / image.getHeight()
-        };
-
-        for(let i = 1; i < numLevels; i++) {
-            const image = await geoTiff.getImage(i);
-
-            resolutions[i] = {
-                x: (boundingBox[2] - boundingBox[0]) / image.getWidth(),
-                y: (boundingBox[3] - boundingBox[1]) / image.getHeight()
-            }
-        }
-
-        return new COGTiledLayer(geoTiff,
-            new Location(boundingBox[2] - boundingBox[0], boundingBox[3] - boundingBox[1]),
-            new Sector(boundingBox[0], boundingBox[1], boundingBox[2], boundingBox[3]),
-            numLevels,
-            resolutions);
     }
 }
 

@@ -1,52 +1,83 @@
 import WorldWind from 'webworldwind-esa';
 import {fromUrl} from 'geotiff/src/main';
-import GeoTIFF from 'geotiff';
+import proj4 from 'proj4';
 
-console.log(GeoTIFF);
-console.log(fromUrl);
-
-//import CogTiledLayer from '../src/layers/COGTiledLayer';
+import CogTiledLayer from '../src/layers/COGTiledLayer';
 
 import LayerManager from './LayerManager';
+import SentinelCloudlessLayer from "../src/layer/SentinelCloudlessLayer";
 
 WorldWind.configuration.baseUrl = window.location.pathname.replace('ControlsExample.html', '');
 const wwd = new WorldWind.WorldWindow("canvasOne");
 
-wwd.addLayer(new WorldWind.BMNGLayer());
-//wwd.addLayer(new CogTiledLayer('https://s3-us-west-2.amazonaws.com/planet-disaster-data/hurricane-harvey/SkySat_Freeport_s03_20170831T162740Z3.tif'));
+wwd.addLayer(new SentinelCloudlessLayer());
 
 fromUrl('https://s3-us-west-2.amazonaws.com/planet-disaster-data/hurricane-harvey/SkySat_Freeport_s03_20170831T162740Z3.tif').then(tiff => {
-    console.log(tiff);
+    let amountOfLevels, boundingBox, width, height, resX, resY, tileHeight, tileWidth;
 
     tiff.getImageCount().then(count => {
-        console.log(count);
-    });
-    tiff.getImage().then(image => {
-        console.log(image);
+        amountOfLevels = count;
 
-        console.log(image.getBoundingBox());
-        console.log(image.getGDALMetadata());
-        console.log(image.getWidth());
-        console.log(image.getHeight());
-    });
+        return tiff.getImage(0);
+    }).then(image => {
+        boundingBox = image.getBoundingBox();
 
-    tiff.getImage(1).then(image => {
-        console.log('Id1', image);
-    });
+        width = image.getWidth();
+        height = image.getHeight();
 
-    tiff.readRasters({
-            bbox: [
-                259537.6000000000058208, 3195976.8000000002793968, 281663.2000000000116415, 3217617.6000000000931323
-            ],
-            resX: 25,
-            resY: 25
-        }
-    ).then(result => {
-        console.log(result);
+        resX = Math.abs((boundingBox[0] - boundingBox[2]) / width);
+        resY = Math.abs((boundingBox[1] - boundingBox[3]) / height);
 
-        const rBand = result[0];
-        const gBand = result[1];
-        const bBand = result[2];
+        tileWidth = image.getTileWidth();
+        tileHeight = image.getTileHeight();
+
+        const targetProjection = image.getGeoKeys()['ProjectedCSTypeGeoKey'];
+
+        console.log(targetProjection);
+
+        return fetch(`https://epsg.io/${targetProjection}.wkt?download`)
+    }).then(result => {
+        return result.text();
+    }).then(sourceProjection => {
+        console.log(sourceProjection);
+        console.log(boundingBox);
+
+        console.log(proj4(sourceProjection, 'WGS84', [boundingBox[0], boundingBox[1]]));
+
+        const min = proj4(sourceProjection, 'WGS84', [boundingBox[0], boundingBox[1]]);
+        const max = proj4(sourceProjection, 'WGS84', [boundingBox[2], boundingBox[3]]);
+
+        boundingBox[0] = min[0];
+        boundingBox[1] = min[1];
+        boundingBox[2] = max[0];
+        boundingBox[3] = max[1];
+
+        console.log(boundingBox);
+
+        const sector = new WorldWind.Sector(boundingBox[1], boundingBox[3], boundingBox[0], boundingBox[2]);
+        console.log(sector);
+        wwd.addLayer(new CogTiledLayer(tiff,
+            new WorldWind.Location(Math.abs(boundingBox[3] - boundingBox[1]), Math.abs(boundingBox[2] - boundingBox[0])),
+            sector, amountOfLevels, resX, resY, tileHeight,
+            tileWidth, sourceProjection));
+
+        wwd.navigator.lookAtLocation = new WorldWind.Location(boundingBox[1],boundingBox[0]);
+        wwd.navigator.range = 100000;
+
+        const show = new WorldWind.RenderableLayer('Around');
+        wwd.addLayer(show);
+
+        const onlyAround = new WorldWind.ShapeAttributes();
+        onlyAround.drawInterior = false;
+
+        show.addRenderable(new WorldWind.SurfacePolygon([
+            new WorldWind.Location(sector.minLatitude, sector.minLongitude),
+            new WorldWind.Location(sector.maxLatitude, sector.minLongitude),
+            new WorldWind.Location(sector.maxLatitude, sector.maxLongitude),
+            new WorldWind.Location(sector.minLatitude, sector.maxLongitude),
+        ], onlyAround));
+
+        wwd.redraw();
     });
 });
 
