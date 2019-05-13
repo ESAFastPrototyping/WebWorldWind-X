@@ -1,5 +1,6 @@
 import WorldWind from 'webworldwind-esa';
 import CyclicPickController from '../src/util/CyclicPickController';
+import SentinelCloudlessLayer from '../src/layer/SentinelCloudlessLayer';
 import LayerManager from './LayerManager';
 
 WorldWind.configuration.baseUrl = window.location.pathname.replace('CyclicPickExample.html', '');
@@ -98,7 +99,7 @@ meshLayer.addRenderable(mesh2);
 meshLayer.addRenderable(mesh3);
 
 var layers = [
-    {layer: new WorldWind.BMNGLayer(), enabled: true},
+    {layer: new SentinelCloudlessLayer(), enabled: true},
     {layer: meshLayer, enabled: true},
     {layer: new WorldWind.CoordinatesDisplayLayer(wwd), enabled: true},
     {layer: new WorldWind.ViewControlsLayer(wwd), enabled: true}
