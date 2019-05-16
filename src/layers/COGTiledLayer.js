@@ -63,7 +63,7 @@ class COGTiledLayer extends TiledImageLayer {
                 resX: this.resX * Math.pow(2, currentLevel),
                 resY: this.resY * Math.pow(2, currentLevel)
             }).then(result => {
-                console.log(result);
+                console.log('Loaded Width: ', result.width, ' Height: ', result.height);
 
                 let rBand, gBand, bBand;
                 // Draw the bands into the canvas.

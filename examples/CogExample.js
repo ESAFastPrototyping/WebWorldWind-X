@@ -57,7 +57,7 @@ fromUrl('https://s3-us-west-2.amazonaws.com/planet-disaster-data/hurricane-harve
         const sector = new WorldWind.Sector(boundingBox[1], boundingBox[3], boundingBox[0], boundingBox[2]);
         console.log(sector);
         wwd.addLayer(new CogTiledLayer(tiff,
-            new WorldWind.Location(Math.abs(boundingBox[3] - boundingBox[1]), Math.abs(boundingBox[2] - boundingBox[0])),
+            new WorldWind.Location(Math.abs(boundingBox[3] - boundingBox[1]) / 2, Math.abs(boundingBox[2] - boundingBox[0]) / 2),
             sector, amountOfLevels, resX, resY, tileHeight,
             tileWidth, sourceProjection));
 
