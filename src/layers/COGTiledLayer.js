@@ -16,11 +16,50 @@ class COGTiledLayer extends TiledImageLayer {
         this.resY = resolutionY;
         this.amounOfLevels = numLevels;
 
-        console.log('CRS: ', crs);
         // Projection URL.
         if(crs) {
             this.sourceProjection = crs;
             this.targetProjection = 'EPSG:4326';
+        }
+    }
+
+    createTopLevelTiles() {
+        this.topLevelTiles = [];
+
+        const level = this.levels.firstLevel();
+
+        var deltaLat = level.tileDelta.latitude,
+            deltaLon = level.tileDelta.longitude,
+
+            sector = level.sector,
+            firstRow = 0,
+            lastRow = 1,
+
+            firstCol = 0,
+            lastCol = 1,
+
+            firstRowLat = sector.minLatitude,
+            firstRowLon = sector.minLongitude,
+
+            minLat = firstRowLat,
+            minLon,
+            maxLat,
+            maxLon;
+
+        for (var row = firstRow; row <= lastRow; row += 1) {
+            maxLat = minLat + deltaLat;
+            minLon = firstRowLon;
+
+            for (var col = firstCol; col <= lastCol; col += 1) {
+                maxLon = minLon + deltaLon;
+                var tileSector = new Sector(minLat, maxLat, minLon, maxLon),
+                    tile = this.createTile(tileSector, level, row, col);
+                this.topLevelTiles.push(tile);
+
+                minLon = maxLon;
+            }
+
+            minLat = maxLat;
         }
     }
 
@@ -33,12 +72,19 @@ class COGTiledLayer extends TiledImageLayer {
                 return;
             }
 
+            if(tile.loading) {
+                return;
+            }
+            tile.loading = true;
+
             var imagePath = tile.imagePath,
                 cache = dc.gpuResourceCache,
                 layer = this;
 
             let sector = tile.sector;
             const currentLevel = this.amounOfLevels - tile.level.levelNumber - 1;
+
+            console.log('Sector: ', sector);
 
             if(this.sourceProjection) {
                 const min = proj4(this.targetProjection, this.sourceProjection, [sector.minLongitude, sector.minLatitude]);
@@ -60,10 +106,10 @@ class COGTiledLayer extends TiledImageLayer {
                     sector.maxLongitude,
                     sector.maxLatitude
                 ],
-                resX: this.resX * Math.pow(2, currentLevel),
-                resY: this.resY * Math.pow(2, currentLevel)
+                width: this.tileWidth / (Math.pow(2, currentLevel)),
+                height: this.tileHeight / (Math.pow(2, currentLevel))
             }).then(result => {
-                console.log('Loaded Width: ', result.width, ' Height: ', result.height);
+                console.log('Loaded Width: ', result.width, ' Height: ', result.height) ;
 
                 let rBand, gBand, bBand;
                 // Draw the bands into the canvas.
@@ -72,6 +118,7 @@ class COGTiledLayer extends TiledImageLayer {
                     gBand = result[0];
                     bBand = result[0];
                 } else {
+                    // Stretch min max to 0 to 255
                     rBand = result[0];
                     gBand = result[1];
                     bBand = result[2];
@@ -79,7 +126,15 @@ class COGTiledLayer extends TiledImageLayer {
 
                 const dataArray = [];
                 rBand.forEach((red, index) => {
-                    dataArray.push(red, gBand[index], bBand[index], 255);
+                    const green = gBand[index];
+                    const blue = bBand[index];
+
+                    // 100 % means difference between max and min but probably for the whole image.
+                    const redBandValue = ((red - 0.124471) / (0.193829 - 0.124471)) * 255;
+                    const greenBandValue = ((green - 0.134592) / (0.180243 - 0.134592)) * 255;
+                    const blueBandValue = ((blue - 0.146628) / (0.190304 - 0.146628)) * 255;
+
+                    dataArray.push(redBandValue, greenBandValue, blueBandValue, 255);
                 });
                 const dataForCanvas = Uint8ClampedArray.from(dataArray);
 
@@ -99,6 +154,8 @@ class COGTiledLayer extends TiledImageLayer {
 
                     layer.currentTilesInvalid = true;
                     layer.absentResourceList.unmarkResourceAbsent(imagePath);
+
+                    tile.loading = false;
 
                     if (!suppressRedraw) {
                         // Send an event to request a redraw.
