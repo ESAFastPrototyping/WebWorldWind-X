@@ -1,89 +1,78 @@
 import WorldWind from 'webworldwind-esa';
-import {fromUrl} from 'geotiff/src/main';
-import proj4 from 'proj4';
 
-import CogTiledLayer from '../src/layers/COGTiledLayer';
-
+import CogTiledLayer from '../src/layer/COGTiledLayer';
 import LayerManager from './LayerManager';
-import SentinelCloudlessLayer from "../src/layer/SentinelCloudlessLayer";
+import SentinelCloudlessLayer from '../src/layer/SentinelCloudlessLayer';
 
-WorldWind.configuration.baseUrl = window.location.pathname.replace('ControlsExample.html', '');
-const wwd = new WorldWind.WorldWindow("canvasOne");
+WorldWind.configuration.baseUrl = window.location.pathname.replace('COGExample.html', '');
 
-wwd.addLayer(new SentinelCloudlessLayer());
+let amountOfLevels, image, tiff;
+GeoTIFF.fromUrl('http://localhost:8080/examples/data/beijing.tif').then(pTiff => {
+    tiff = pTiff;
 
-fromUrl('http://localhost:8080/examples/data/imageToDriveExample.tif').then(tiff => {
-    let amountOfLevels, boundingBox, width, height, resX, resY, tileHeight, tileWidth;
-
-    tiff.getImageCount().then(count => {
-        amountOfLevels = count;
-
-        return tiff.getImage(0);
-    }).then(image => {
-        boundingBox = image.getBoundingBox();
-
-        width = image.getWidth();
-        height = image.getHeight();
-
-        resX = Math.abs((boundingBox[0] - boundingBox[2]) / width);
-        resY = Math.abs((boundingBox[1] - boundingBox[3]) / height);
-
-        tileWidth = 414;
-        tileHeight = 318;
-
-        const targetProjection = image.getGeoKeys()['ProjectedCSTypeGeoKey'];
-
-        console.log(targetProjection);
-
-        if(targetProjection) {
-            return fetch(`https://epsg.io/${targetProjection}.wkt?download`).then(result => {
-                return result.text();
-            })
-        } else {
-            return null;
-        }
-    }).then(sourceProjection => {
-        console.log(sourceProjection);
-        console.log(boundingBox);
-
-        if(sourceProjection) {
-            console.log(proj4(sourceProjection, 'WGS84', [boundingBox[0], boundingBox[1]]));
-
-            const min = proj4(sourceProjection, 'WGS84', [boundingBox[0], boundingBox[1]]);
-            const max = proj4(sourceProjection, 'WGS84', [boundingBox[2], boundingBox[3]]);
-
-            boundingBox[0] = min[0];
-            boundingBox[1] = min[1];
-            boundingBox[2] = max[0];
-            boundingBox[3] = max[1];
-        }
-
-        const show = new WorldWind.RenderableLayer('Around');
-
-        const sector = new WorldWind.Sector(boundingBox[1], boundingBox[3], boundingBox[0], boundingBox[2]);
-        console.log(sector);
-        wwd.addLayer(new CogTiledLayer(tiff,
-            new WorldWind.Location(Math.abs(boundingBox[3] - boundingBox[1]) / 2, Math.abs(boundingBox[2] - boundingBox[0]) / 2),
-            sector, amountOfLevels, resX, resY, tileHeight,
-            tileWidth, sourceProjection, show));
-
-        wwd.navigator.lookAtLocation = new WorldWind.Location(boundingBox[1],boundingBox[0]);
-        wwd.navigator.range = 100000;
-
-        wwd.addLayer(show);
-
-        const onlyAround = new WorldWind.ShapeAttributes();
-        onlyAround.drawInterior = false;
-
-        show.addRenderable(new WorldWind.SurfacePolygon([
-            new WorldWind.Location(sector.minLatitude, sector.minLongitude),
-            new WorldWind.Location(sector.maxLatitude, sector.minLongitude),
-            new WorldWind.Location(sector.maxLatitude, sector.maxLongitude),
-            new WorldWind.Location(sector.minLatitude, sector.maxLongitude),
-        ], onlyAround));
-
-        wwd.redraw();
-    });
+    return tiff.getImageCount();
+}).then(pAmountOfLevels => {
+    amountOfLevels = pAmountOfLevels;
+    return tiff.getImage(0);
+}).then(pImage => {
+    image = pImage;
+    initGlobe(image, amountOfLevels);
 });
 
-new LayerManager(wwd);
+function initGlobe(image, amountOfLevels) {
+    const boundingBox = image.getBoundingBox();
+
+    const width = image.getWidth();
+    const height = image.getHeight();
+
+    const tileWidth = width / 2;
+    const tileHeight = height / 2;
+
+    const sector = new WorldWind.Sector(boundingBox[1], boundingBox[3], boundingBox[0], boundingBox[2]);
+
+    const wwd = new WorldWind.WorldWindow("canvasOne");
+    wwd.addLayer(new SentinelCloudlessLayer());
+
+    wwd.addLayer(new BeijingCogLayer(tiff,
+        new WorldWind.Location(Math.abs(boundingBox[3] - boundingBox[1]) / 2, Math.abs(boundingBox[2] - boundingBox[0]) / 2),
+        sector, amountOfLevels, tileHeight,
+        tileWidth, new GeoTIFF.Pool()));
+
+    wwd.navigator.lookAtLocation = new WorldWind.Location((boundingBox[3] + boundingBox[1]) / 2, (boundingBox[2] + boundingBox[0]) / 2);
+    wwd.navigator.range = 100000;
+
+    new LayerManager(wwd);
+
+    wwd.redraw();
+}
+
+/**
+ * Updated Cloud Optimised Geotiff layer taking into account the fact that in Beijing example the result doesn't contain
+ * directly RGB colors.
+ */
+class BeijingCogLayer extends CogTiledLayer {
+    constructor() {
+        super();
+    }
+
+    bandsToCanvasData(result) {
+        const rBand = result[0];
+        const gBand = result[1];
+        const bBand = result[2];
+
+        const dataArray = [];
+        rBand.forEach((red, index) => {
+            const green = gBand[index];
+            const blue = bBand[index];
+
+            // 100 % means difference between max and min but probably for the whole image.
+            const redBandValue = ((red - 0.124471) / (0.193829 - 0.124471)) * 255;
+            const greenBandValue = ((green - 0.134592) / (0.180243 - 0.134592)) * 255;
+            const blueBandValue = ((blue - 0.146628) / (0.190304 - 0.146628)) * 255;
+
+            dataArray.push(redBandValue, greenBandValue, blueBandValue, 255);
+        });
+
+        return dataArray;
+    }
+}

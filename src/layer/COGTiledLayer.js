@@ -1,28 +1,26 @@
 import WorldWind from 'webworldwind-esa';
-import proj4 from "proj4";
 
 const Sector = WorldWind.Sector,
     TiledImageLayer = WorldWind.TiledImageLayer,
     WWUtil = WorldWind.WWUtil;
 
+/**
+ * The Tiled Layer working in the context of the CloudOptimisedGeotiffs.
+ */
 class COGTiledLayer extends TiledImageLayer {
-    constructor(geoTiff, levelZeroDelta, sector, numLevels, resolutionX, resolutionY, tileHeight, tileWidth, crs) {
+    constructor(geoTiff, levelZeroDelta, sector, numLevels, tileHeight, tileWidth, pool) {
         super(sector, levelZeroDelta, numLevels, 'image/png', 'COGTiledLayer ' + WWUtil.guid(), tileWidth, tileHeight);
 
-        console.log(sector, levelZeroDelta, numLevels, tileWidth, tileHeight);
-
+        this.pool = pool;
         this.geoTiff = geoTiff;
-        this.resX = resolutionX;
-        this.resY = resolutionY;
-        this.amounOfLevels = numLevels;
-
-        // Projection URL.
-        if(crs) {
-            this.sourceProjection = crs;
-            this.targetProjection = 'EPSG:4326';
-        }
+        this.amountOfLevels = numLevels;
     }
 
+    /**
+     * @inheritDoc
+     * The COGs usually don't fit properly to the standard tile schema of WebWorldWind. Prepare top level tiles reflecting
+     * the COG schema
+     */
     createTopLevelTiles() {
         this.topLevelTiles = [];
 
@@ -65,6 +63,7 @@ class COGTiledLayer extends TiledImageLayer {
 
     /**
      * @inheritDoc
+     * Read the specific tile in specific resolution from the Cloud Optimised Geotiff.
      */
     retrieveTileImage(dc, tile, suppressRedraw){
         if (this.currentRetrievals.indexOf(tile.imagePath) < 0) {
@@ -79,24 +78,9 @@ class COGTiledLayer extends TiledImageLayer {
 
             var imagePath = tile.imagePath,
                 cache = dc.gpuResourceCache,
-                layer = this;
-
-            let sector = tile.sector;
-            const currentLevel = this.amounOfLevels - tile.level.levelNumber - 1;
-
-            console.log('Sector: ', sector);
-
-            if(this.sourceProjection) {
-                const min = proj4(this.targetProjection, this.sourceProjection, [sector.minLongitude, sector.minLatitude]);
-                const max = proj4(this.targetProjection, this.sourceProjection,[sector.maxLongitude, sector.maxLatitude]);
-
-                sector = new Sector(
-                    min[1],
-                    max[1],
-                    min[0],
-                    max[0]
-                );
-            }
+                layer = this,
+                sector = tile.sector;
+            const currentLevel = this.amountOfLevels - tile.level.levelNumber - 1;
 
             // bbox is based on the current data
             this.geoTiff.readRasters({
@@ -107,35 +91,10 @@ class COGTiledLayer extends TiledImageLayer {
                     sector.maxLatitude
                 ],
                 width: this.tileWidth / (Math.pow(2, currentLevel)),
-                height: this.tileHeight / (Math.pow(2, currentLevel))
+                height: this.tileHeight / (Math.pow(2, currentLevel)),
+                pool: this.pool
             }).then(result => {
-                console.log('Loaded Width: ', result.width, ' Height: ', result.height) ;
-
-                let rBand, gBand, bBand;
-                // Draw the bands into the canvas.
-                if(result.length === 1) {
-                    rBand = result[0];
-                    gBand = result[0];
-                    bBand = result[0];
-                } else {
-                    // Stretch min max to 0 to 255
-                    rBand = result[0];
-                    gBand = result[1];
-                    bBand = result[2];
-                }
-
-                const dataArray = [];
-                rBand.forEach((red, index) => {
-                    const green = gBand[index];
-                    const blue = bBand[index];
-
-                    // 100 % means difference between max and min but probably for the whole image.
-                    const redBandValue = ((red - 0.124471) / (0.193829 - 0.124471)) * 255;
-                    const greenBandValue = ((green - 0.134592) / (0.180243 - 0.134592)) * 255;
-                    const blueBandValue = ((blue - 0.146628) / (0.190304 - 0.146628)) * 255;
-
-                    dataArray.push(redBandValue, greenBandValue, blueBandValue, 255);
-                });
+                const dataArray = this.bandsToCanvasData(result);
                 const dataForCanvas = Uint8ClampedArray.from(dataArray);
 
                 const imageData = new ImageData(dataForCanvas, result.width, result.height);
@@ -166,6 +125,28 @@ class COGTiledLayer extends TiledImageLayer {
                 }
             });
         }
+    }
+
+    /**
+     * Converts the raw bands received from the GeoTIFF parsing into the RGB data to be drawn to the Canvas.
+     * The default implementation simply draws the first three bands without any transformations.
+     * @param result {Array} Array of bands present in the image.
+     * @returns {Array} RGBA array.
+     */
+    bandsToCanvasData(result) {
+        const rBand = result[0];
+        const gBand = result[1];
+        const bBand = result[2];
+
+        const dataArray = [];
+        rBand.forEach((red, index) => {
+            const green = gBand[index];
+            const blue = bBand[index];
+
+            dataArray.push(red, green, blue, 255);
+        });
+
+        return dataArray;
     }
 }
 
