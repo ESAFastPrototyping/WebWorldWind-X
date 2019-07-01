@@ -51,8 +51,8 @@ function initGlobe(image, amountOfLevels) {
  * directly RGB colors.
  */
 class BeijingCogLayer extends CogTiledLayer {
-    constructor() {
-        super();
+    constructor(geoTiff, levelZeroDelta, sector, numLevels, tileHeight, tileWidth, pool) {
+        super(geoTiff, levelZeroDelta, sector, numLevels, tileHeight, tileWidth, pool);
     }
 
     bandsToCanvasData(result) {
