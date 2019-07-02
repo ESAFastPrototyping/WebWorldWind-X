@@ -13,7 +13,11 @@ class COGTiledLayer extends TiledImageLayer {
 
         this.pool = pool;
         this.geoTiff = geoTiff;
-        this.amountOfLevels = numLevels;
+
+        this.tileHeight = tileHeight;
+        this.tileWidth = tileWidth;
+
+        this.queue = new Queue(16);
     }
 
     /**
@@ -61,6 +65,24 @@ class COGTiledLayer extends TiledImageLayer {
         }
     }
 
+    loadTiff(dc, tile, suppressRedraw, bbox) {
+        this.queue.addTask(taskResolved => {
+            this.geoTiff.readRasters({
+                bbox: bbox,
+                width: this.tileWidth,
+                height: this.tileHeight,
+                pool: this.pool
+            }).then(result => {
+                this.processLoadedGeotiff(dc, tile, suppressRedraw, result);
+
+                taskResolved();
+            }).catch(error => {
+                tile.loading = false;
+                taskResolved();
+            });
+        });
+    }
+
     /**
      * @inheritDoc
      * Read the specific tile in specific resolution from the Cloud Optimised Geotiff.
@@ -76,54 +98,50 @@ class COGTiledLayer extends TiledImageLayer {
             }
             tile.loading = true;
 
-            var imagePath = tile.imagePath,
-                cache = dc.gpuResourceCache,
-                layer = this,
-                sector = tile.sector;
-            const currentLevel = this.amountOfLevels - tile.level.levelNumber - 1;
+            var sector = tile.sector;
 
-            // bbox is based on the current data
-            this.geoTiff.readRasters({
-                bbox: [
-                    sector.minLongitude,
-                    sector.minLatitude,
-                    sector.maxLongitude,
-                    sector.maxLatitude
-                ],
-                width: this.tileWidth / (Math.pow(2, currentLevel)),
-                height: this.tileHeight / (Math.pow(2, currentLevel)),
-                pool: this.pool
-            }).then(result => {
-                const dataArray = this.bandsToCanvasData(result);
-                const dataForCanvas = Uint8ClampedArray.from(dataArray);
+            this.loadTiff(dc, tile, suppressRedraw, [
+                sector.minLongitude,
+                sector.minLatitude,
+                sector.maxLongitude,
+                sector.maxLatitude
+            ]);
+        }
+    }
 
-                const imageData = new ImageData(dataForCanvas, result.width, result.height);
-                const canvas = document.createElement('canvas');
-                canvas.width = result.width;
-                canvas.height = result.height;
+    processLoadedGeotiff(dc, tile, suppressRedraw, result) {
+        var imagePath = tile.imagePath,
+            cache = dc.gpuResourceCache,
+            layer = this;
 
-                const context2D = canvas.getContext('2d');
-                context2D.putImageData(imageData, 0, 0);
+        const dataArray = this.bandsToCanvasData(result);
+        const dataForCanvas = Uint8ClampedArray.from(dataArray);
 
-                var texture = layer.createTexture(dc, tile, canvas);
-                layer.removeFromCurrentRetrievals(imagePath);
+        const imageData = new ImageData(dataForCanvas, result.width, result.height);
+        const canvas = document.createElement('canvas');
+        canvas.width = result.width;
+        canvas.height = result.height;
 
-                if (texture) {
-                    cache.putResource(imagePath, texture, texture.size);
+        const context2D = canvas.getContext('2d');
+        context2D.putImageData(imageData, 0, 0);
 
-                    layer.currentTilesInvalid = true;
-                    layer.absentResourceList.unmarkResourceAbsent(imagePath);
+        var texture = layer.createTexture(dc, tile, canvas);
+        layer.removeFromCurrentRetrievals(imagePath);
 
-                    tile.loading = false;
+        if (texture) {
+            cache.putResource(imagePath, texture, texture.size);
 
-                    if (!suppressRedraw) {
-                        // Send an event to request a redraw.
-                        var e = document.createEvent('Event');
-                        e.initEvent(WorldWind.REDRAW_EVENT_TYPE, true, true);
-                        window.dispatchEvent(e);
-                    }
-                }
-            });
+            layer.currentTilesInvalid = true;
+            layer.absentResourceList.unmarkResourceAbsent(imagePath);
+
+            tile.loading = false;
+
+            if (!suppressRedraw) {
+                // Send an event to request a redraw.
+                var e = document.createEvent('Event');
+                e.initEvent(WorldWind.REDRAW_EVENT_TYPE, true, true);
+                window.dispatchEvent(e);
+            }
         }
     }
 
@@ -147,6 +165,38 @@ class COGTiledLayer extends TiledImageLayer {
         });
 
         return dataArray;
+    }
+}
+
+class Queue {
+    constructor(maxRunning) {
+        this.tasks = [];
+        this.currentlyRunning = 0;
+        this.maxRunning = maxRunning;
+
+        this.taskResolved = this.taskResolved.bind(this);
+    }
+
+    addTask(task) {
+        if(this.currentlyRunning < this.maxRunning) {
+            this.currentlyRunning++;
+            task(this.taskResolved);
+        } else {
+            this.tasks.push(task);
+        }
+    }
+
+    taskResolved() {
+        this.currentlyRunning--;
+
+        if(this.currentlyRunning < this.maxRunning) {
+            if(this.tasks.length > 0) {
+                this.currentlyRunning++;
+                const newTask = this.tasks.shift();
+
+                newTask(this.taskResolved);
+            }
+        }
     }
 }
 

@@ -13,20 +13,21 @@ GeoTIFF.fromUrl('http://localhost:8080/examples/data/beijing.tif').then(pTiff =>
     return tiff.getImageCount();
 }).then(pAmountOfLevels => {
     amountOfLevels = pAmountOfLevels;
+
     return tiff.getImage(0);
 }).then(pImage => {
     image = pImage;
-    initGlobe(image, amountOfLevels);
+
+    return tiff.getImage(amountOfLevels - 1);
+}).then(pImage => {
+    const tileWidth = pImage.fileDirectory.ImageWidth / 2;
+    const tileHeight = pImage.fileDirectory.ImageLength / 2;
+
+    initGlobe(image, tileWidth, tileHeight, amountOfLevels);
 });
 
-function initGlobe(image, amountOfLevels) {
+function initGlobe(image, tileWidth, tileHeight, amountOfLevels) {
     const boundingBox = image.getBoundingBox();
-
-    const width = image.getWidth();
-    const height = image.getHeight();
-
-    const tileWidth = width / 2;
-    const tileHeight = height / 2;
 
     const sector = new WorldWind.Sector(boundingBox[1], boundingBox[3], boundingBox[0], boundingBox[2]);
 
@@ -39,7 +40,7 @@ function initGlobe(image, amountOfLevels) {
         tileWidth, new GeoTIFF.Pool()));
 
     wwd.navigator.lookAtLocation = new WorldWind.Location((boundingBox[3] + boundingBox[1]) / 2, (boundingBox[2] + boundingBox[0]) / 2);
-    wwd.navigator.range = 100000;
+    wwd.navigator.range = 2000000;
 
     new LayerManager(wwd);
 
