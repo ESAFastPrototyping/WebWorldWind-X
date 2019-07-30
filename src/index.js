@@ -1,5 +1,13 @@
-export * from './view/Controls';
-export * from './util/CyclicPickController';
-export * from './util/LayerOrder';
-export * from './shapes/TexturedSurfacePolygon';
-export * from './shapes/TexturedSurfaceShape';
+import Controls from './view/Controls';
+import CyclicPickController from './util/CyclicPickController';
+import LayerOrder from './util/LayerOrder';
+import TexturedSurfacePolygon from './shapes/TexturedSurfacePolygon';
+import TexturedSurfaceShape from './shapes/TexturedSurfaceShape';
+
+export default {
+    Controls: Controls,
+    CyclicPickController: CyclicPickController,
+    LayerOrder: LayerOrder,
+    TexturedSurfacePolygon: TexturedSurfacePolygon,
+    TexturedSurfaceShape: TexturedSurfaceShape
+};
