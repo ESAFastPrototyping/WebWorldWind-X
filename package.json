@@ -2,7 +2,8 @@
   "name": "webworldwind-x",
   "version": "2.0.0",
   "description": "Extension repository collecting work done in the scope of EOAPPS project within ESA.",
-  "main": "src/index.js",
+  "main": "dist/main.js",
+  "files": ["dist/main.js", "dist/main.js.map"],
   "scripts": {
     "build": "npm run clean && npm run lint && npm run test && npm run jsdoc && npm run webpack && npm run copy && npm run remove",
     "build:watch": "parallelshell 'npm run webpack:watch' 'npm run examples:watch'",
