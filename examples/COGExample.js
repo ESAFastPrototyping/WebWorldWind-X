@@ -7,7 +7,7 @@ import SentinelCloudlessLayer from '../src/layer/SentinelCloudlessLayer';
 WorldWind.configuration.baseUrl = window.location.pathname.replace('COGExample.html', '');
 
 let amountOfLevels, image, tiff;
-GeoTIFF.fromUrl('http://localhost:8080/examples/data/beijing.tif').then(pTiff => {
+GeoTIFF.fromUrl('/examples/data/beijing.tif').then(pTiff => {
     tiff = pTiff;
 
     return tiff.getImageCount();
