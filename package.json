@@ -13,7 +13,7 @@
     "lint": "jshint ./src ",
     "test": "karma start --single-run",
     "test:watch": "karma start --auto-watch",
-    "release": "npm run build && npm version:minor && npm publish",
+    "release": "npm run build && npm run version:minor && npm publish",
     "remove": "del-cli dist/*Example.js*",
     "serve": "http-server ./dist/",
     "start": "npm run build && npm run serve",
