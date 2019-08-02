@@ -1,4 +1,5 @@
 // karma.conf.js  --  karma configuration
+process.env.CHROME_BIN = require('puppeteer').executablePath();
 
 module.exports = function(config) {
     config.set({
@@ -8,6 +9,7 @@ module.exports = function(config) {
         frameworks: ['jasmine'],
 
         files: [
+            'node_modules/babel-polyfill/dist/polyfill.js',
             './test/**/*.test.js'
         ],
 
@@ -18,7 +20,7 @@ module.exports = function(config) {
 
         port: 9876,
 
-        browsers: ['PhantomJS'],
+        browsers: ['ChromeHeadless'],
 
         concurrency: Infinity,
 
