@@ -1,0 +1,3 @@
+https://scihub.copernicus.eu/apihub/search?q=(beginposition%3A%20%5B2019-07-26T01%3A52%3A59.312Z%20TO%202019-07-26T02%3A12%3A59.312Z%5D)AND(filename%3A(S2A_*))AND(producttype%3A(S2MSI1C))&rows=100&orderby=beginposition%20desc&format=json
+https://scihub.copernicus.eu/apihub/search?q=(beginposition%3A%20%5B2019-07-26T01%3A52%3A59.312Z%20TO%202019-07-26T02%3A12%3A59.312Z%5D)AND(filename%3A(S1A_*))AND(producttype%3A(SLC))&rows=100&orderby=beginposition%20desc&format=json
+https://scihub.copernicus.eu/apihub/search?q=(beginposition%3A%20%5B2019-05-26T01%3A52%3A59.312Z%20TO%202019-07-26T02%3A12%3A59.312Z%5D)AND(filename%3A(S3A_*))&rows=100&orderby=beginposition%20desc&format=json
