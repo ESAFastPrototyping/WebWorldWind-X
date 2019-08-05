@@ -1,7 +1,7 @@
 ## Travis-CI YAML to publish webworldwind-x to GitHub Pages
 language: node_js
 node_js:
-  - "stable"
+  - "v10.15.3"
 dist: trusty
 sudo: required
 addons:
