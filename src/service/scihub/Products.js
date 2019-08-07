@@ -134,6 +134,11 @@ export default class Products {
      */
     async load({shortName, products = [], location, beginTime, endTime, startIndex} = {}) {
         const query = new Query({shortName, products, location, beginTime, endTime, startIndex});
+        const cached = this._cache.get(query);
+        if(cached) {
+            return cached;
+        }
+
         const url = this._baseUrl + query.url();
 
         const response = await this._fetch(url, {
@@ -154,6 +159,7 @@ export default class Products {
         const itemsPerPage = Number(feed['opensearch:itemsPerPage']._text);
 
         feed.next = (startIndex + itemsPerPage) < totalResults;
+        this._cache.set(query, feed);
         return feed;
     }
 }
