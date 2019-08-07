@@ -21,6 +21,9 @@ export default class QuickLook {
                 "Accept": "blob",
             }
         });
+        if(!response.ok) {
+            throw new Error('ERROR QuickLook#icon Status: ' + response.status);
+        }
         const blobData = await response.blob();
         const url = window.URL.createObjectURL(blobData);
         const image = await this.createImage(url);
