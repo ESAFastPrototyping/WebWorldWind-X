@@ -52,16 +52,29 @@ export default class Products {
      * @param location {Object} Latitude, Longitude of specific point.
      * @param beginTime {Date} From when we want the data
      * @param endTime {Date} Until when we want the data
-     * @returns {Promise<Renderable[]>} Renderable to be used within the WebWorldWind.
+     * @returns {Promise<Object>}
+     *   errors contains array of errors happening during creation of the renderables.
+     *   total represents the total amount of products
+     *   renderables the renderables tobe displayed
      */
     async renderables({shortName, products = [], location, beginTime, endTime} = {}) {
         const productsLocal = await this.products({shortName, products, location, beginTime, endTime});
         const renderables = [];
+        const errors = [];
         for(let productIndex = 0; productIndex < productsLocal.length; productIndex++) {
-            const renderable = await productsLocal[productIndex].renderable();
-            renderables.push(renderable);
+            try {
+                const renderable = await productsLocal[productIndex].renderable();
+                renderables.push(renderable);
+            } catch(e) {
+                console.log('Products#renderables', e);
+                errors.push(e);
+            }
         }
-        return renderables;
+        return {
+            errors: errors,
+            renderables: renderables,
+            total: productsLocal.length
+        };
     }
 
     /**
@@ -96,6 +109,8 @@ export default class Products {
                         const product = new Product(this._fetch, entry);
                         this._cache.set(product.id(), product);
                         return product;
+                    } else {
+                        return cached;
                     }
                 } else {
                     return null;
