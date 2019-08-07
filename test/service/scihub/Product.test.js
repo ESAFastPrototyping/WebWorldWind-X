@@ -4,7 +4,8 @@ import {fetch as fetchPolyfill} from 'whatwg-fetch';
 describe('Product', () => {
     describe('renderable', () => {
         it('properly parses the WKT footprint', async () => {
-            const product = new Product(() => {}, {
+            const product = new Product(() => {
+            }, {
                 id: 'id1',
                 str: {
                     footprint: 'MULTIPOLYGON (((143.0515033072139 62.98660681025939, 145.21721057471424 63.030515399107884, 145.15466375659273 64.01543504402161, 142.91334302837234 63.96960512533651, 143.0515033072139 62.98660681025939)))'
@@ -30,6 +31,27 @@ describe('Product', () => {
             });
             const result = await product.renderable();
             expect(result.image !== null).toBe(true);
+        });
+
+        it('properly throws Error on non 200 response', async () => {
+            const product = new Product(fetchPolyfill, {
+                id: 'id1',
+                link: [
+                    {
+                        rel: 'icon',
+                        href: 'https://scihub.copernicus.eu/apihub/odata/v1/Products(\'33db4795-da08-4960-9493-d0d78c5b16cf\')/Products(\'Quicklook\')/$value'
+                    }
+                ],
+                str: {
+                    footprint: 'MULTIPOLYGON (((143.0515033072139 62.98660681025939, 145.21721057471424 63.030515399107884, 145.15466375659273 64.01543504402161, 142.91334302837234 63.96960512533651, 143.0515033072139 62.98660681025939)))'
+                }
+            });
+            try {
+                await product.renderable();
+                expect(false).toBe(true);
+            } catch (err) {
+                expect(true).toBe(true);
+            }
         });
     })
 });
