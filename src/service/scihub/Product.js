@@ -65,7 +65,12 @@ export default class Product {
         });
         const renderable = new TexturedSurfacePolygon(boundaries, this.footprintAttributes());
         if(this._icon) {
-            renderable.image = await this._icon.icon();
+            try {
+                renderable.image = await this._icon.icon();
+            } catch (e) {
+                console.log('ERROR: Product#renderable ', e);
+                renderable.error = e;
+            }
         }
         return renderable;
     }

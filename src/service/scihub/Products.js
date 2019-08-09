@@ -64,6 +64,9 @@ export default class Products {
         for(let productIndex = 0; productIndex < productsLocal.length; productIndex++) {
             try {
                 const renderable = await productsLocal[productIndex].renderable();
+                if(renderable.error) {
+                    errors.push(renderable.error);
+                }
                 renderables.push(renderable);
             } catch(e) {
                 console.log('Products#renderables', e);
