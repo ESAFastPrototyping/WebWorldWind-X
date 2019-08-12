@@ -8,7 +8,7 @@
     "dist/main.js.map"
   ],
   "scripts": {
-    "build": "npm run clean && npm run lint && npm run test && npm run jsdoc && npm run webpack && npm run copy && npm run remove",
+    "build": "npm run clean && npm run lint && npm run jsdoc && npm run webpack && npm run copy && npm run remove",
     "build:watch": "parallelshell 'npm run webpack:watch' 'npm run examples:watch'",
     "clean": "del-cli dist",
     "copy": "copyfiles examples/*.html dist/ && copyfiles -u 1 dist/*Example.js* dist/examples/ && copyfiles examples/*.png dist/ && copyfiles -u 1 examples/images/* dist/examples && copyfiles -u 1 examples/images/view/* dist/examples && copyfiles index.html dist/ && copyfiles examples/*.css dist/ && copyfiles examples/data/* dist/",
@@ -25,7 +25,7 @@
     "version:minor": "npm version minor",
     "version:patch": "npm version patch",
     "webpack": "webpack-cli --config webpack.config.js --mode production",
-    "webpack:watch": "webpack-cli --config webpack.config.js -w --mode development"
+    "webpack:watch": "webpack-cli --config webpack-dev.config.js -w --mode development"
   },
   "repository": {
     "type": "git",
