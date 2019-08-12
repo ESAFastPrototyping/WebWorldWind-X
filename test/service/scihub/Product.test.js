@@ -46,12 +46,9 @@ describe('Product', () => {
                     footprint: 'MULTIPOLYGON (((143.0515033072139 62.98660681025939, 145.21721057471424 63.030515399107884, 145.15466375659273 64.01543504402161, 142.91334302837234 63.96960512533651, 143.0515033072139 62.98660681025939)))'
                 }
             });
-            try {
-                await product.renderable();
-                expect(false).toBe(true);
-            } catch (err) {
-                expect(true).toBe(true);
-            }
+
+            const renderable = await product.renderable();
+            expect(renderable.error.toString()).toBe('Error: ERROR QuickLook#icon Status: 401');
         });
     })
 });
