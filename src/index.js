@@ -1,3 +1,4 @@
+import { AcquisitionPlans } from "./service/acquisitionPlans/AcquisitionPlans";
 import Controls from './view/Controls';
 import CyclicPickController from './util/CyclicPickController';
 import LayerOrder from './util/LayerOrder';
@@ -13,5 +14,6 @@ export default {
     SciHubProducts: SciHubProducts,
     SentinelCloudlessLayer: SentinelCloudlessLayer,
     TexturedSurfacePolygon: TexturedSurfacePolygon,
-    TexturedSurfaceShape: TexturedSurfaceShape
+    TexturedSurfaceShape: TexturedSurfaceShape,
+    AcquisitionPlans: AcquisitionPlans,
 };
