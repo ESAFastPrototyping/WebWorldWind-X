@@ -9,7 +9,8 @@ module.exports = {
         KmlGroundOverlayExample: ['babel-polyfill', './examples/KmlGroundOverlayExample.js'],
         LayerOrderExample: ['babel-polyfill', './examples/LayerOrderExample.js'],
         ScihubProductsExample: ['babel-polyfill', './examples/ScihubProductsExample.js'],
-        TexturedSurfacePolygonExample: ['babel-polyfill', './examples/TexturedSurfacePolygonExample.js']
+        TexturedSurfacePolygonExample: ['babel-polyfill', './examples/TexturedSurfacePolygonExample.js'],
+        AcquisitionPlansExample: ['babel-polyfill', './examples/AcquisitionPlansExample.js'],
     },
     devtool: 'source-map',
     output: {
@@ -21,6 +22,17 @@ module.exports = {
     module: {
         rules: [
             {test: /\.css$/, use: ['style-loader','css-loader']},
+
+            {
+                test: /\.worker\.js$/,
+                use: { 
+                    loader: 'worker-loader',
+                    options: {
+                        publicPath: '/examples/',
+                    },
+                },
+            },
+
             {
                 test: /\.(js|jsx)$/,
                 exclude: /node_modules/,
