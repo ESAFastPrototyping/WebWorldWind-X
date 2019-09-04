@@ -8,6 +8,7 @@ module.exports = {
         CyclicPickExample: ['babel-polyfill', './examples/CyclicPickExample.js'],
         KmlGroundOverlayExample: ['babel-polyfill', './examples/KmlGroundOverlayExample.js'],
         LayerOrderExample: ['babel-polyfill', './examples/LayerOrderExample.js'],
+        OrbitsExample: ['babel-polyfill', './examples/OrbitsExample.js'],
         ScihubProductsExample: ['babel-polyfill', './examples/ScihubProductsExample.js'],
         TexturedSurfacePolygonExample: ['babel-polyfill', './examples/TexturedSurfacePolygonExample.js'],
         AcquisitionPlansExample: ['babel-polyfill', './examples/AcquisitionPlansExample.js'],
