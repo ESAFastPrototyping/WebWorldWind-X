@@ -1,8 +1,8 @@
 import WorldWind from 'webworldwind-esa';
 import SentinelCloudlessLayer from '../src/layer/SentinelCloudlessLayer';
 import LayerManager from './LayerManager';
-import Orbits from '../src/shapes/orbits/Orbits';
-import utils from '../src/shapes/orbits/utils';
+import Orbits from '../src/shapes/Orbits';
+import utils from '../src/util/eo/utils';
 
 const {
     RenderableLayer,

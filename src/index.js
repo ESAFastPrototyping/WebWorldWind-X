@@ -2,11 +2,12 @@ import { AcquisitionPlans } from './service/acquisitionPlans/AcquisitionPlans';
 import Controls from './view/Controls';
 import CyclicPickController from './util/CyclicPickController';
 import LayerOrder from './util/LayerOrder';
-import Orbits from './shapes/orbits/Orbits';
+import Orbits from './shapes/Orbits';
+import SciHubProducts from './service/scihub/Products';
+import SentinelCloudlessLayer from './layer/SentinelCloudlessLayer';
+import Swath from './shapes/Swath';
 import TexturedSurfacePolygon from './shapes/TexturedSurfacePolygon';
 import TexturedSurfaceShape from './shapes/TexturedSurfaceShape';
-import SciHubProducts from './service/scihub/Products';
-import SentinelCloudlessLayer from "./layer/SentinelCloudlessLayer";
 
 export default {
     AcquisitionPlans: AcquisitionPlans,
@@ -16,6 +17,7 @@ export default {
     Orbit: Orbits,
     SciHubProducts: SciHubProducts,
     SentinelCloudlessLayer: SentinelCloudlessLayer,
+    Swath: Swath,
     TexturedSurfacePolygon: TexturedSurfacePolygon,
     TexturedSurfaceShape: TexturedSurfaceShape,
 };

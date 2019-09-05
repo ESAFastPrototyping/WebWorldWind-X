@@ -8,7 +8,7 @@ const {
     ShapeAttributes
 } = WorldWind;
 
-import utils from './utils';
+import utils from '../util/eo/utils';
 
 /**
  * @exports Orbits
