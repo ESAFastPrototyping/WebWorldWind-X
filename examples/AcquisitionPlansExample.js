@@ -4,7 +4,7 @@ import LayerManager from './LayerManager';
 import SentinelCloudlessLayer from '../src/layer/SentinelCloudlessLayer';
 import TexturedSurfacePolygon from '../src/shapes/TexturedSurfacePolygon';
 import { AcquisitionPlans } from '../src/service/acquisitionPlans/AcquisitionPlans';
-import { Workers } from '../src/service/acquisitionPlans/Workers.js';
+import { Workers } from '../src/util/workers/Workers.js';
 import KMLWorker from '../src/service/acquisitionPlans/KML.worker.js';
 
 WorldWind.configuration.baseUrl = window.location.pathname.replace('AcquisitionPlansExample.html', '');
