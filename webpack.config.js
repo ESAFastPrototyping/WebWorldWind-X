@@ -42,7 +42,7 @@ module.exports = {
                 use: { 
                     loader: 'worker-loader',
                     options: {
-                        publicPath: '/examples/../',
+                        publicPath: '/WebWorldWind-X/',
                     },
                 },
             },
