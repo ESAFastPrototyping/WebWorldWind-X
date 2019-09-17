@@ -23,4 +23,8 @@ orbitsLayer.addRenderable(new Orbits(satRec));
 wwd.addLayer(new SentinelCloudlessLayer());
 wwd.addLayer(orbitsLayer);
 
+const position = utils.getOrbitPosition(satRec, new Date());
+position.altitude = position.altitude + 10000000;
+wwd.goTo(position);
+
 new LayerManager(wwd);
