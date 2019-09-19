@@ -19,10 +19,10 @@ class Orbits extends Renderable {
      * orbits are displayed from now back to past and
      * @param satrec {Object} SDG format representing the satellite.
      * @param time {Date} Date for which the orbits will be displayed.
-     * @param past {Number} Amount of milliseconds for the time window in past.
-     * @param future {Number} Amount of milliseconds for the time window in future.
+     * @param timeWindow {Number} Amount of milliseconds for the time window.
+     * @param orbitPoints {Number} Amount of the Panther.
      */
-    constructor(satrec, time = new Date(), past = 540000, future = 540000) {
+    constructor(satrec, time = new Date(), timeWindow = 2 * 540000, orbitPoints = 720) {
         super();
 
         if(!satrec) {
@@ -31,19 +31,16 @@ class Orbits extends Renderable {
 
         this._satrec = satrec;
 
-        this._past = past;
-        this._future = future;
+        this._timeWindow = timeWindow;
+        this._orbitPoints = orbitPoints;
 
-        this._orbitPoints = 360;
-        this._trails = [
-            this.trail(this.trailAttributes(new Color(213 / 255, 214  / 255, 210 / 255, 1))),
-            this.trail(this.trailAttributes(new Color(1, 1, 0, 1)))
-        ];
+        this._pastTrail = this.trail(this.trailAttributes(new Color(213 / 255, 214  / 255, 210 / 255, 1)));
+        this._futureTrail = this.trail(this.trailAttributes(new Color(1, 1, 0, 1)));
 
         this._currentTime = time;
         this._previousTime = time;
 
-        this.update(true);
+        this.populate();
     }
 
     /**
@@ -57,7 +54,7 @@ class Orbits extends Renderable {
         this._satrec = satelliteRecord;
         // This must signalize somehow that it needs to be recalculated.
 
-        this.update(true);
+        this.populate();
     }
 
     /**
@@ -83,9 +80,8 @@ class Orbits extends Renderable {
             return;
         }
 
-        this._trails.forEach(trail => {
-            trail.render(dc);
-        });
+        this._pastTrail.render(dc);
+        this._futureTrail.render(dc);
     }
 
     /**
@@ -95,45 +91,89 @@ class Orbits extends Renderable {
      * @private
      */
     update(force = false) {
-        this.orbit(
-            this._trails[0],
-            (now, i, tick) => {return new Date(now - i * tick);},
-            Math.floor(this._past / this._orbitPoints),
-            force);
-        this.orbit(
-            this._trails[1],
-            (now, i, tick) => {return new Date(now + i * tick);},
-            Math.floor(this._future / this._orbitPoints),
-            force);
-    }
-
-    /**
-     * Update the positions of trail based on the provided time and the previous time.
-     * @private
-     * @param trail {Path} Trail representing the orbit to update.
-     * @param nextTick {Function} Function that provides us with time of the next tick.
-     * @param tick {Number} Milliseconds for each tick.
-     * @param force {Boolean} Recreate the whole path if forced.
-     */
-    orbit(trail, nextTick, tick, force = false) {
         const now = this._currentTime.getTime();
         const previousTime = this._previousTime.getTime();
-        const positionsToReplace = !force ? Math.abs(now - previousTime) / tick : this._orbitPoints;
-        const startDate = nextTick(now, this._orbitPoints - positionsToReplace, tick).getTime();
+        const change = now - previousTime;
+        if(change === 0 && !force) {
+            return;
+        }
 
-        const positions = [];
-        for(let i = 0; i < positionsToReplace; i++) {
-            // Now is starting with the amount of the time.
-            const time = nextTick(startDate, i, tick);
+        if(force) {
+            this.populate();
+            return;
+        }
+
+        const isInFuture = change > 0;
+
+        const tick = Math.floor(this._timeWindow / this._orbitPoints);
+        let positionsToReplace = Math.ceil(Math.abs(now - previousTime) / tick);
+        if(positionsToReplace > this._orbitPoints) {
+            positionsToReplace = this._orbitPoints;
+        }
+
+        if(isInFuture) {
+            this._pastTrail.positions.pop();
+
+            // Add to the start date.
+            const startDate = (now + (this._timeWindow / 2)) - (positionsToReplace * tick);
+            const positionsToTransfer = [];
+            const positionsToAdd = [];
+            for(let positionIndex = 0; positionIndex < positionsToReplace; positionIndex++) {
+                const time = new Date(startDate + positionIndex * tick);
+                const position = utils.getOrbitPositionWithPositionalData(this._satrec, time).position;
+                position.time = time.getTime();
+
+                this._pastTrail.positions.shift();
+
+                positionsToTransfer.push(this._futureTrail.positions.shift());
+                positionsToAdd.push(position);
+            }
+
+            this._pastTrail.positions = this._pastTrail.positions.concat(positionsToTransfer);
+            this._futureTrail.positions = this._futureTrail.positions.concat(positionsToAdd);
+
+            this._pastTrail.positions.push(this._futureTrail.positions[0]);
+        } else {
+            const startDate = now - (this._timeWindow / 2);
+            const positionsToTransfer = [];
+            const positionsToAdd = [];
+            for(let positionIndex = 0; positionIndex < positionsToReplace; positionIndex++) {
+                const time = new Date(startDate + positionIndex * tick);
+                const position = utils.getOrbitPositionWithPositionalData(this._satrec, time).position;
+                position.time = time.getTime();
+
+                this._futureTrail.positions.pop();
+
+                positionsToTransfer.push(this._pastTrail.positions.pop());
+                positionsToAdd.push(position);
+            }
+
+            this._futureTrail.positions = positionsToTransfer.concat(this._futureTrail.positions);
+            this._pastTrail.positions = positionsToAdd.concat(this._pastTrail.positions);
+        }
+    }
+
+    populate() {
+        const now = this._currentTime.getTime();
+        const startDate = now - (this._timeWindow / 2);
+        const tick = Math.floor(this._timeWindow / this._orbitPoints);
+
+        this._futureTrail.positions = [];
+        this._pastTrail.positions = [];
+        for(let positionIndex = 0; positionIndex < this._orbitPoints; positionIndex++) {
+            const time = new Date(startDate + positionIndex * tick);
             const position = utils.getOrbitPositionWithPositionalData(this._satrec, time).position;
             position.time = time.getTime();
 
-            positions.push(position);
+            if(positionIndex < this._orbitPoints / 2) {
+                this._pastTrail.positions.push(position);
+            } else if(positionIndex === this._orbitPoints / 2) {
+                this._pastTrail.positions.push(position);
+                this._futureTrail.positions.push(position);
+            } else {
+                this._futureTrail.positions.push(position);
+            }
         }
-
-        trail.positions = trail.positions
-            .slice(positionsToReplace)
-            .concat(positions);
     }
 
     /**
