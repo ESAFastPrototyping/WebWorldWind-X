@@ -108,7 +108,8 @@ class Orbits extends Renderable {
         const tick = Math.floor(this._timeWindow / this._orbitPoints);
         let positionsToReplace = Math.ceil(Math.abs(now - previousTime) / tick);
         if(positionsToReplace > this._orbitPoints) {
-            positionsToReplace = this._orbitPoints;
+            this.populate();
+            return;
         }
 
         if(isInFuture) {
