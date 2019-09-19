@@ -159,22 +159,25 @@ class Orbits extends Renderable {
         const startDate = now - (this._timeWindow / 2);
         const tick = Math.floor(this._timeWindow / this._orbitPoints);
 
-        this._futureTrail.positions = [];
-        this._pastTrail.positions = [];
+        const futurePositions = [];
+        const pastPositions = [];
         for(let positionIndex = 0; positionIndex < this._orbitPoints; positionIndex++) {
             const time = new Date(startDate + positionIndex * tick);
             const position = utils.getOrbitPositionWithPositionalData(this._satrec, time).position;
             position.time = time.getTime();
 
             if(positionIndex < this._orbitPoints / 2) {
-                this._pastTrail.positions.push(position);
+                pastPositions.push(position);
             } else if(positionIndex === this._orbitPoints / 2) {
-                this._pastTrail.positions.push(position);
-                this._futureTrail.positions.push(position);
+                pastPositions.push(position);
+                futurePositions.push(position);
             } else {
-                this._futureTrail.positions.push(position);
+                futurePositions.push(position);
             }
         }
+
+        this._pastTrail.positions = pastPositions;
+        this._futureTrail.positions = futurePositions;
     }
 
     /**
