@@ -13,7 +13,7 @@ WorldWind.configuration.baseUrl = window.location.pathname.replace('ModelExample
 const wwd = new WorldWindow("canvasOne");
 
 const modelsLayer = new RenderableLayer();
-fetch('http://localhost:8080/examples/data/sentinel1/s1.json').then(response => {
+fetch('./data/sentinel1/s1.json').then(response => {
     return response.json();
 }).then(satelliteData => {
     modelsLayer.addRenderable(new SatelliteModel(satelliteData, {
