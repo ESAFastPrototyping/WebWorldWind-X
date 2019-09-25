@@ -1,6 +1,6 @@
 {
   "name": "webworldwind-x",
-  "version": "2.4.8",
+  "version": "2.4.9",
   "description": "Extension repository collecting work done in the scope of EOAPPS project within ESA.",
   "main": "dist/main.js",
   "files": [
