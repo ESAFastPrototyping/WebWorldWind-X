@@ -64,7 +64,7 @@ export class AcquisitionPlansParser {
             if (typeof shapes === 'string') {
                 console.info('Worker unable to parse kml file', url);
                 try {
-                    parsedShapes = this.parseSync(shapes, satName, filterDate.filterDate);
+                    parsedShapes = this.parseSync(shapes, satName, fileInfo.filterDate);
                 }
                 catch (error) {
                     return cb(error);
