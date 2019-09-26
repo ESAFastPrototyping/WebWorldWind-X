@@ -45,6 +45,11 @@ class Swath extends Renderable {
     }
 
     positions(satellite) {
+        if(!this._translateDistance) {
+            satellite.origin = satellite.currentPosition;
+            satellite.heading = satellite.currentHeading;
+        }
+
         const {
             origin,
             heading
