@@ -10,6 +10,7 @@ module.exports = {
         LayerOrderExample: ['babel-polyfill', './examples/LayerOrderExample.js'],
         ModelExample: ['babel-polyfill', './examples/ModelExample.js'],
         OrbitsExample: ['babel-polyfill', './examples/OrbitsExample.js'],
+        PlanetsExample: ['babel-polyfill', './examples/PlanetsExample.js'],
         ScihubProductsExample: ['babel-polyfill', './examples/ScihubProductsExample.js'],
         SwathExample: ['babel-polyfill', './examples/SwathExample.js'],
         TexturedSurfacePolygonExample: ['babel-polyfill', './examples/TexturedSurfacePolygonExample.js'],

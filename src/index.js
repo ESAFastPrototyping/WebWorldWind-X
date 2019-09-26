@@ -8,6 +8,7 @@ import Model from './shapes/satellites/Model';
 import Orbits from './shapes/Orbits';
 import SciHubProducts from './service/scihub/Products';
 import SentinelCloudlessLayer from './layer/SentinelCloudlessLayer';
+import StarFieldLayer from "./layer/starfield/StarFieldLayer";
 import Swath from './shapes/Swath';
 import TexturedSurfacePolygon from './shapes/TexturedSurfacePolygon';
 import TexturedSurfaceShape from './shapes/TexturedSurfaceShape';
@@ -24,6 +25,7 @@ export default {
     Orbit: Orbits,
     SciHubProducts: SciHubProducts,
     SentinelCloudlessLayer: SentinelCloudlessLayer,
+    StarFieldLayer: StarFieldLayer,
     Swath: Swath,
     TexturedSurfacePolygon: TexturedSurfacePolygon,
     TexturedSurfaceShape: TexturedSurfaceShape,
