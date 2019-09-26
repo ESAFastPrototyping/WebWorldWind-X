@@ -3,7 +3,7 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="UTF-8">
-    <title>The examples in the Web World Wind repository.</title>
+    <title>Extensions for Web WorldWind</title>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
@@ -17,15 +17,12 @@
 <div class="container content-container" style="margin-top: 80px;">
     <div class="col-sm-12">
         <h1>About</h1>
-        <p>This repository contains the extension to the Web World Wind library. It focuses on the UI elements and
-            utilities that doesn't have place in the official repository as well as on the support to the less used
-            formats that shouldn't grow the size of the core framework.
-
-        </p>
+        <p>This repository contains a collection of specialised extensions to the functionality of Web WorldWind.</p>
+        <p>These extensions were created in the scope of the Frame Contract for Social Media and Mobile Applications Development for EO Ground Segment and Mission Operations, European Space Agency (ESA) Contract Number 4000112250. They are released under Apache License 2.0.</p>
+        <p>Consortium: Solenix Deutschland GmbH (Prime Contractor), TERRASIGNA SRL, GISAT SRO, Progressive Systems SRL, Qualteh JR SRL.</p>
 
         <h1>Examples</h1>
-        <p>The full code for the examples below is available in the examples module of the Web WorldWind Extension
-            project.</p>
+        <p>The examples below provide an overview of the available extensions. Their complete source code is available in the examples module.</p>
 
         <hr/>
 
@@ -33,14 +30,14 @@
             <div class="col-md-4">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <a href="examples/CyclicPickExample.html"><h3 class="panel-title">CyclicPickExample</h3></a>
+                        <a href="examples/CyclicPickExample.html"><h3 class="panel-title">Cyclic Picking</h3></a>
                     </div>
                     <div class="panel-body">
                         <a href="examples/CyclicPickExample.html">
                             <img src="examples/CyclicPickExample.png" class="img-responsive center-block">
                         </a>
                         <p>
-                            Demonstrates different controller for picking. This controller selects all renderables on the given point. Remembers the selected one and if the user clicks on the same place renderable above the one will be selected. If there is none above then, the one below will be selected.
+                            Alternative pick controller that cyclically selects renderables under the cursor instead of selecting them all at once.
                         </p>
                         <h5>Source:</h5>
                         <a href="https://github.com/WorldWindLabs/WebWorldWind-X/blob/master/examples/CyclicPickExample.js">CyclicPickExample.js</a><br>
@@ -48,18 +45,17 @@
                     </div>
                 </div>
             </div>
-
             <div class="col-md-4">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <a href="examples/LayerOrderExample.html"><h3 class="panel-title">LayerOrderExample</h3></a>
+                        <a href="examples/LayerOrderExample.html"><h3 class="panel-title">Layer Ordering</h3></a>
                     </div>
                     <div class="panel-body">
                         <a href="examples/LayerOrderExample.html">
                             <img src="examples/LayerOrderExample.png" class="img-responsive center-block">
                         </a>
                         <p>
-                            Demonstrates utility class for automatic reordering of the layers. The default behavior is that the layers are ordered based on the position in the array. This allows ordering of the layers based on the z-index. The higher z-index means the layer is higher in the order.
+                            Utility class for automatic reordering of layers based on an extra attribute. The default behavior in Web WorldWind is that layers are ordered based on their position in the layer array. This allows ordering of the layers based on a z-index property. A higher z-index means the layer is rendered on top.
                         </p>
                         <h5>Source:</h5>
                         <a href="https://github.com/WorldWindLabs/WebWorldWind-X/blob/master/examples/LayerOrderExample.js">LayerOrderExample.js</a><br>
@@ -67,18 +63,17 @@
                     </div>
                 </div>
             </div>
-
             <div class="col-md-4">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <a href="examples/TexturedSurfacePolygonExample.html"><h3 class="panel-title">TexturedSurfacePolygonExample</h3></a>
+                        <a href="examples/TexturedSurfacePolygonExample.html"><h3 class="panel-title">Textured Surface Polygon</h3></a>
                     </div>
                     <div class="panel-body">
                         <a href="examples/TexturedSurfacePolygonExample.html">
                             <img src="examples/TexturedSurfacePolygonExample.png" class="img-responsive center-block">
                         </a>
                         <p>
-                            The standard surface polygon implementation doesn't allow texture to be used as the coverage. This implementation takes a texture and draws it as the cover of the polygon. It supports only the rectangular textures.
+                            The standard surface polygon implementation cannot be textures with an image. This implementation takes a texture and draws it as the cover of the polygon. It supports only rectangular textures.
                         </p>
                         <h5>Source:</h5>
                         <a href="https://github.com/WorldWindLabs/WebWorldWind-X/blob/master/examples/TexturedSurfacePolygonExample.js">TexturedSurfacePolygonExample.js</a><br>
@@ -92,14 +87,14 @@
             <div class="col-md-4">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <a href="examples/ControlsExample.html"><h3 class="panel-title">ControlsExample</h3></a>
+                        <a href="examples/ControlsExample.html"><h3 class="panel-title">HTML Controls</h3></a>
                     </div>
                     <div class="panel-body">
                         <a href="examples/ControlsExample.html">
                             <img src="examples/ControlsExample.png" class="img-responsive center-block">
                         </a>
                         <p>
-                            Demonstrates alternative controls built in the HTML. The controls are positioned to the bottom right part of the canvas.
+                            Alternative globe controls built in HTML instead of being rendered in WebGL. The controls are positioned at the bottom right of the canvas.
                         </p>
                         <h5>Source:</h5>
                         <a href="https://github.com/WorldWindLabs/WebWorldWind-X/blob/master/examples/ControlsExample.js">ControlsExample.js</a><br>
@@ -107,18 +102,17 @@
                     </div>
                 </div>
             </div>
-
             <div class="col-md-4">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <a href="examples/Base64ImageExample.html"><h3 class="panel-title">Base64ImageExample</h3></a>
+                        <a href="examples/Base64ImageExample.html"><h3 class="panel-title">Base64 Image</h3></a>
                     </div>
                     <div class="panel-body">
                         <a href="examples/Base64ImageExample.html">
                             <img src="examples/Base64ImageExample.png" class="img-responsive center-block">
                         </a>
                         <p>
-                            Demonstrates usage of Base 64 encoded imagery in the Placemarks.
+                            Use of base 64 encoded images for placemarks.
                         </p>
                         <h5>Source:</h5>
                         <a href="https://github.com/WorldWindLabs/WebWorldWind-X/blob/master/examples/Base64ImageExample.js">Base64ImageExample.js</a><br>
@@ -126,18 +120,17 @@
                     </div>
                 </div>
             </div>
-
             <div class="col-md-4">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <a href="examples/KmlGroundOverlayExample.html"><h3 class="panel-title">KmlGroundOverlayExample</h3></a>
+                        <a href="examples/KmlGroundOverlayExample.html"><h3 class="panel-title">KML Ground Overlay for Sentinel</h3></a>
                     </div>
                     <div class="panel-body">
                         <a href="examples/KmlGroundOverlayExample.html">
                             <img src="examples/KmlGroundOverlayExample.png" class="img-responsive center-block">
                         </a>
                         <p>
-                            Demonstrates usage of updated KML Ground Overlay element to process the KML Footprint from Sentinel-1 product.
+                            Alternative KML Ground Overlay element that handles footprints of Sentinel-1 product.
                         </p>
                         <h5>Source:</h5>
                         <a href="https://github.com/WorldWindLabs/WebWorldWind-X/blob/master/examples/KmlGroundOverlayExample.js">KmlGroundOverlayExample.js</a><br>
@@ -151,14 +144,14 @@
             <div class="col-md-4">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <a href="examples/ScihubProductsExample.html"><h3 class="panel-title">ScihubProductsExample</h3></a>
+                        <a href="examples/ScihubProductsExample.html"><h3 class="panel-title">SciHub Products</h3></a>
                     </div>
                     <div class="panel-body">
                         <a href="examples/ScihubProductsExample.html">
                             <img src="examples/ScihubProductsExample.png" class="img-responsive center-block">
                         </a>
                         <p>
-                            Demonstrates downloading the information about the products and quick looks from SciHub.
+                            Service and renderables for retrieving and displaying information from the <a href="https://scihub.copernicus.eu/" target="_blank">Copernicus Open Access Hub</a>.
                         </p>
                         <h5>Source:</h5>
                         <a href="https://github.com/WorldWindLabs/WebWorldWind-X/blob/master/examples/ScihubProductsExample.js">ScihubProductsExample.js</a><br>
@@ -169,14 +162,14 @@
             <div class="col-md-4">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <a href="examples/AcquisitionPlansExample.html"><h3 class="panel-title">AcquisitionPlansExample</h3></a>
+                        <a href="examples/AcquisitionPlansExample.html"><h3 class="panel-title">Sentinel Acquisition Plans</h3></a>
                     </div>
                     <div class="panel-body">
                         <a href="examples/AcquisitionPlansExample.html">
                             <img src="examples/AcquisitionPlansExample.png" class="img-responsive center-block">
                         </a>
                         <p>
-                            Demonstrates how to download and use Sentinel acquisition plans.
+                            Service and renderables for downloading and displaying Sentinel acquisition plans from ESA.
                         </p>
                         <h5>Source:</h5>
                         <a href="https://github.com/WorldWindLabs/WebWorldWind-X/blob/master/examples/AcquisitionPlansExample.js">AcquisitionPlansExample.js</a><br>
@@ -187,14 +180,14 @@
             <div class="col-md-4">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <a href="examples/OrbitsExample.html"><h3 class="panel-title">OrbitsExample</h3></a>
+                        <a href="examples/OrbitsExample.html"><h3 class="panel-title">Satellite Orbit</h3></a>
                     </div>
                     <div class="panel-body">
                         <a href="examples/OrbitsExample.html">
                             <img src="examples/OrbitsExample.png" class="img-responsive center-block">
                         </a>
                         <p>
-                            Demonstrates how to display past and future orbits for a satellite.
+                            Service and renderables for computing and displaying satellite orbits.
                         </p>
                         <h5>Source:</h5>
                         <a href="https://github.com/WorldWindLabs/WebWorldWind-X/blob/master/examples/OrbitsExample.js">OrbitsExample.js</a><br>
@@ -208,14 +201,14 @@
             <div class="col-md-4">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <a href="examples/SwathExample.html"><h3 class="panel-title">SwathExample</h3></a>
+                        <a href="examples/SwathExample.html"><h3 class="panel-title">Satellite Swath Cone</h3></a>
                     </div>
                     <div class="panel-body">
                         <a href="examples/SwathExample.html">
                             <img src="examples/SwathExample.png" class="img-responsive center-block">
                         </a>
                         <p>
-                            Demonstrates visualization of Swaths showing acquisitions of new data.
+                            Renderable for displaying a cone between a satellite and its swath.
                         </p>
                         <h5>Source:</h5>
                         <a href="https://github.com/WorldWindLabs/WebWorldWind-X/blob/master/examples/SwathExample.js">SwathExample.js</a><br>
@@ -226,14 +219,14 @@
             <div class="col-md-4">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <a href="examples/ModelExample.html"><h3 class="panel-title">ModelExample</h3></a>
+                        <a href="examples/ModelExample.html"><h3 class="panel-title">Satellite Model</h3></a>
                     </div>
                     <div class="panel-body">
                         <a href="examples/ModelExample.html">
                             <img src="examples/ModelExample.png" class="img-responsive center-block">
                         </a>
                         <p>
-                            Demonstrates visualization of Model of specific Satellite.
+                            Renderable for displaying the 3D model of a satellite.
                         </p>
                         <h5>Source:</h5>
                         <a href="https://github.com/WorldWindLabs/WebWorldWind-X/blob/master/examples/ModelExample.js">ModelExample.js</a><br>
@@ -244,8 +237,7 @@
         </div>
 
         <h1>Documentation</h1>
-
-        The Api documentation for this repository is available <a href="api-doc/index.html">here</a>
+        <p>The API documentation for these extensions is available <a href="api-doc/index.html">here</a>.</p>
     </div>
 </div>
 </body>
