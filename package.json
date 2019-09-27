@@ -1,7 +1,7 @@
 {
   "name": "webworldwind-x",
-  "version": "2.4.12",
-  "description": "Extension repository collecting work done in the scope of EOAPPS project within ESA.",
+  "version": "2.4.11",
+  "description": "Extensions for Web WorldWind",
   "main": "dist/main.js",
   "files": [
     "dist/main.js",
@@ -29,19 +29,19 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/balhar-jakub/webworldwind-x.git"
+    "url": "https://github.com/WorldWindLabs/WebWorldWind-X.git"
   },
   "keywords": [
     "Web World Wind",
     "Earth Observation",
     "3D Globe"
   ],
-  "author": "Jakub Balhar, Yann Voumard, Florin Draghici, Servet Giafher, Claudia Ifrim",
+  "author": "Claudia Ifrim, Florin Draghici, Jakub Balhar, and Yann Voumard",
   "license": "APL-2.0",
   "bugs": {
-    "url": "https://github.com/balhar-jakub/webworldwind-x/issues"
+    "url": "https://github.com/WorldWindLabs/WebWorldWind-X/issues"
   },
-  "homepage": "https://github.com/balhar-jakub/webworldwind-x#readme",
+  "homepage": "https://worldwindlabs.github.io/WebWorldWind-X/",
   "devDependencies": {
     "@babel/core": "7.0.0",
     "@babel/preset-env": "7.1.0",
@@ -73,7 +73,7 @@
   },
   "dependencies": {
     "easysax": "0.3.2",
-    "webworldwind-esa": "0.10.0-alpha.4",
+    "webworldwind-esa": "0.10.0-alpha.5",
     "xml-js": "1.6.11"
   }
 }
