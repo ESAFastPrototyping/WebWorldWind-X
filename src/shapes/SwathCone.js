@@ -9,7 +9,7 @@ const {
 
 import utils from '../util/eo/utils';
 
-class Swath extends Renderable {
+class SwathCone extends Renderable {
     /**
      *
      * @param satellite {Object|{currentPosition, nextPosition, currentHeading, nextHeading}}
@@ -115,4 +115,4 @@ class Swath extends Renderable {
     }
 }
 
-export default Swath;
+export default SwathCone;

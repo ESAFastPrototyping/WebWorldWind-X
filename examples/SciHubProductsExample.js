@@ -37,7 +37,9 @@ document.getElementById('showProducts').addEventListener('click', () => {
             beginTime: new Date("2017-06-01 03:45:32.004+02:00"),
             endTime: new Date("2017-06-01 04:45:32.004+02:00")
         });
-        productsLayer.addRenderables(productsLocal);
+        if(productsLocal.errors.length === 0) {
+            productsLayer.addRenderables(productsLocal.renderables);
+        }
         wwd.redraw();
     }
 

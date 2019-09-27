@@ -9,7 +9,7 @@ import Orbits from './shapes/Orbits';
 import SciHubProducts from './service/scihub/Products';
 import SentinelCloudlessLayer from './layer/SentinelCloudlessLayer';
 import StarFieldLayer from "./layer/starfield/StarFieldLayer";
-import Swath from './shapes/Swath';
+import SwathCone from './shapes/SwathCone';
 import TexturedSurfacePolygon from './shapes/TexturedSurfacePolygon';
 import TexturedSurfaceShape from './shapes/TexturedSurfaceShape';
 import { Workers } from './util/workers/Workers.js';
@@ -26,7 +26,7 @@ export default {
     SciHubProducts: SciHubProducts,
     SentinelCloudlessLayer: SentinelCloudlessLayer,
     StarFieldLayer: StarFieldLayer,
-    Swath: Swath,
+    SwathCone: SwathCone,
     TexturedSurfacePolygon: TexturedSurfacePolygon,
     TexturedSurfaceShape: TexturedSurfaceShape,
     Workers: Workers

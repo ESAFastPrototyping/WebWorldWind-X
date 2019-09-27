@@ -1,11 +1,12 @@
 import WorldWind from 'webworldwind-esa';
 import SentinelCloudlessLayer from '../src/layer/SentinelCloudlessLayer';
 import LayerManager from './LayerManager';
-import Swath from '../src/shapes/Swath';
+import SwathCone from '../src/shapes/SwathCone';
 import utils from '../src/util/eo/utils';
 
 const {
     Color,
+    Position,
     RenderableLayer,
     WorldWindow
 } = WorldWind;
@@ -27,7 +28,7 @@ const nextHeadingRad = utils.headingAngleRadians(nextPosition.latitude, nextPosi
 const nextHeading = utils.rad2deg(nextHeadingRad);
 
 const swathLayer = new RenderableLayer();
-swathLayer.addRenderable(new Swath({
+swathLayer.addRenderable(new SwathCone({
     currentPosition,
     nextPosition,
     currentHeading,
@@ -38,7 +39,8 @@ wwd.addLayer(new SentinelCloudlessLayer());
 wwd.addLayer(swathLayer);
 
 const position = utils.getOrbitPosition(satRec, new Date());
-position.altitude = position.altitude + 10000000;
-wwd.goTo(position);
+const range = position.altitude + 5000000;
+wwd.navigator.lookAtLocation = new Position(position.latitude, position.longitude, 0);
+wwd.navigator.range = range;
 
 new LayerManager(wwd);

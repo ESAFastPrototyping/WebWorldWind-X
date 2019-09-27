@@ -12,7 +12,7 @@ module.exports = {
         PlanetsExample: ['babel-polyfill', './examples/PlanetsExample.js'],
         OrbitsExample: ['babel-polyfill', './examples/OrbitsExample.js'],
         ScihubProductsExample: ['babel-polyfill', './examples/ScihubProductsExample.js'],
-        SwathExample: ['babel-polyfill', './examples/SwathExample.js'],
+        SwathConeExample: ['babel-polyfill', './examples/SwathConeExample.js'],
         TexturedSurfacePolygonExample: ['babel-polyfill', './examples/TexturedSurfacePolygonExample.js'],
         AcquisitionPlansExample: ['babel-polyfill', './examples/AcquisitionPlansExample.js'],
     },
