@@ -7,7 +7,7 @@ WorldWind.configuration.baseUrl = window.location.pathname.replace('Base64ImageE
 
 const wwd = new WorldWind.WorldWindow("canvasOne");
 wwd.navigator.range = 1000000;
-wwd.navigator.lookAtLocation = new WorldWind.Location(50, 20);
+wwd.navigator.lookAtLocation = new WorldWind.Position(50, 20, 0);
 
 wwd.addLayer(new SentinelCloudlessLayer());
 

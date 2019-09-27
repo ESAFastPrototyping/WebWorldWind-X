@@ -27,8 +27,8 @@ texturedPolygon.image = texture;
 
 layerWithTexturedSurfacePolygon.addRenderable(texturedPolygon);
 
-wwd.navigator.range = 187000;
-wwd.navigator.lookAtLocation = new WorldWind.Location(37.6, 15);
+wwd.navigator.range = 620000;
+wwd.navigator.lookAtLocation = new WorldWind.Position(37.6, 15, 0);
 
 for (let l = 0; l < layers.length; l++) {
     layers[l].layer.enabled = layers[l].enabled;

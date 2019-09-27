@@ -17,7 +17,7 @@ kmlFilePromise.then(function (kmlFile) {
     wwd.addLayer(renderableLayer);
     wwd.redraw();
 
-    wwd.goTo(new WorldWind.Position(-1.2,-69.5,2000000));
+    wwd.goTo(new WorldWind.Position(-1.2,-69.5));
 });
 
 new LayerManager(wwd);

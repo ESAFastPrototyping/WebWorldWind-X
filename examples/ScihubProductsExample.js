@@ -4,14 +4,14 @@ import SentinelCloudlessLayer from '../src/layer/SentinelCloudlessLayer';
 import LayerManager from './LayerManager';
 
 const {
-    Location,
+    Position,
     RenderableLayer,
     WorldWindow
 } = WorldWind;
 
 WorldWind.configuration.baseUrl = window.location.pathname.replace('ScihubProductsExample.html', '');
 const wwd = new WorldWindow("canvasOne");
-wwd.navigator.lookAtLocation = new Location(30, 55);
+wwd.navigator.lookAtLocation = new Position(30, 55, 0);
 
 const productsLayer = new RenderableLayer('Products');
 wwd.addLayer(new SentinelCloudlessLayer());
