@@ -12,7 +12,7 @@ To build and serve the extensions and examples locally, run: `npm start`
 
 ## Building
 
-Install [NodeJS](https://nodejs.org/en/). The build is known to work with v6.9.2 (LTS).
+Install [NodeJS](https://nodejs.org/en/). The build is known to work with v10.15.3 (LTS).
 
 - `npm install` downloads the required dependencies.
 - `npm run build` builds everything into the dist directory.
@@ -29,3 +29,11 @@ These extensions were created in the scope of the Frame Contract for Social Medi
 They are released under Apache License 2.0.
 
 Consortium: Solenix Deutschland GmbH (Prime Contractor), TERRASIGNA SRL, GISAT SRO, Progressive Systems SRL, Qualteh JR SRL.
+
+### License of included satellite.js
+
+I chose the MIT License because this library is a derivative work off Brandon Rhodes sgp4, and that is licensed with MIT. It just seemed simpler this way, sub-licensing freedoms notwithstanding.
+
+I worked in the Dining Hall at UCSC for a month, which means I signed a form that gives UCSC partial ownership of anything I make while under their aegis, so I included them as owners of the copyright.
+
+Please email all complaints to help@ucsc.edu 
