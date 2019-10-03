@@ -32,7 +32,7 @@ Consortium: Solenix Deutschland GmbH (Prime Contractor), TERRASIGNA SRL, GISAT S
 
 ### satellite.js
 
-This repository includes a copy of satellite.js release by its author as follows.
+This repository includes a copy of satellite.js released by its author as follows.
 
 Copyright (C) 2013 Shashwat Kandadai, UCSC Jack Baskin School of Engineering
 
