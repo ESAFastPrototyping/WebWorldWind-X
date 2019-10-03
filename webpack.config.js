@@ -11,7 +11,7 @@ module.exports = {
         ModelExample: ['babel-polyfill', './examples/ModelExample.js'],
         OrbitsExample: ['babel-polyfill', './examples/OrbitsExample.js'],
         PlanetsExample: ['babel-polyfill', './examples/PlanetsExample.js'],
-        ScihubProductsExample: ['babel-polyfill', './examples/ScihubProductsExample.js'],
+        SciHubProductsExample: ['babel-polyfill', './examples/SciHubProductsExample.js'],
         SwathConeExample: ['babel-polyfill', './examples/SwathConeExample.js'],
         TexturedSurfacePolygonExample: ['babel-polyfill', './examples/TexturedSurfacePolygonExample.js'],
         AcquisitionPlansExample: ['babel-polyfill', './examples/AcquisitionPlansExample.js'],
