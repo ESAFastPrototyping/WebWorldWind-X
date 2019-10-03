@@ -1,6 +1,6 @@
 {
   "name": "webworldwind-x",
-  "version": "2.5.0",
+  "version": "2.5.1",
   "description": "Extensions for Web WorldWind",
   "main": "dist/main.js",
   "files": [
