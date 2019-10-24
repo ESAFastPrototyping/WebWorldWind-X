@@ -10,6 +10,43 @@ You can explore the extensions in action at https://worldwindlabs.github.io/WebW
 
 To build and serve the extensions and examples locally, run: `npm start`
 
+### Use from NPM
+
+To install the library run `npm install --save webworldwind-x` at the command line.
+
+To use the classes from the library you need to import the library as an object and then you can either reference them 
+via . notation or destructure them to the relevant classes.
+
+Destructuring example
+
+``` 
+import WorldWindX from 'webworldwind-x;
+const {
+    AcquisitionPlans,
+    Controls,
+    CyclicPickController,
+    EoUtils,
+    KMLWorker,
+    LayerOrder,
+    Model,
+    Orbit,
+    SciHubProducts,
+    SentinelCloudlessLayer,
+    StarFieldLayer,
+    SwathCone,
+    TexturedSurfacePolygon,
+    TexturedSurfaceShape,
+    Workers
+} = WorldWindX
+```
+
+Dot notation
+
+``` 
+import WorldWindX from 'webworldwind-x;
+const acqPlans = new WorldWindX.AcquisitionPlans();
+```
+
 ## Building
 
 Install [NodeJS](https://nodejs.org/en/). The build is known to work with v10.15.3 (LTS).

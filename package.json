@@ -74,7 +74,7 @@
   },
   "dependencies": {
     "easysax": "0.3.2",
-    "webworldwind-esa": "0.10.0-alpha.6",
+    "webworldwind-esa": "1.0.0-rc.1",
     "xml-js": "1.6.11"
   }
 }
