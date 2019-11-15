@@ -74,6 +74,7 @@
   },
   "dependencies": {
     "easysax": "0.3.2",
+    "js-quadtree": "^2.0.1",
     "webworldwind-esa": "1.0.0-rc.1",
     "xml-js": "1.6.11"
   }

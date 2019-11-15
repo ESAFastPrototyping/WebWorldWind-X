@@ -4,6 +4,7 @@ import CyclicPickController from './util/CyclicPickController';
 import LayerOrder from './util/LayerOrder';
 import EoUtils from './util/eo/utils';
 import KMLWorker from './service/acquisitionPlans/KML.worker.js';
+import LargeDataLayer from './layer/point/LargeDataLayer';
 import Model from './shapes/satellites/Model';
 import Orbits from './shapes/Orbits';
 import SciHubProducts from './service/scihub/Products';
@@ -20,6 +21,7 @@ export default {
     CyclicPickController: CyclicPickController,
     EoUtils: EoUtils,
     KMLWorker: KMLWorker,
+    LargeDataLayer: LargeDataLayer,
     LayerOrder: LayerOrder,
     Model: Model,
     Orbit: Orbits,

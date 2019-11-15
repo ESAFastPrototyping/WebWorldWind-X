@@ -7,6 +7,7 @@ module.exports = {
         ControlsExample: ['babel-polyfill', './examples/ControlsExample.js'],
         CyclicPickExample: ['babel-polyfill', './examples/CyclicPickExample.js'],
         KmlGroundOverlayExample: ['babel-polyfill', './examples/KmlGroundOverlayExample.js'],
+        LargeDataLayerExample: ['babel-polyfill', './examples/LargeDataLayerExample.js'],
         LayerOrderExample: ['babel-polyfill', './examples/LayerOrderExample.js'],
         ModelExample: ['babel-polyfill', './examples/ModelExample.js'],
         OrbitsExample: ['babel-polyfill', './examples/OrbitsExample.js'],
