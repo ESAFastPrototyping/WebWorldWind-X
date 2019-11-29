@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Class: AcquisitionPlansParser</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Class: AcquisitionPlansParser</h1>
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        <h2><span class="attribs"><span class="type-signature"></span></span>AcquisitionPlansParser<span class="signature">(workers)</span><span class="type-signature"></span></h2>
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+
+    
+
+    
+    <h4 class="name" id="AcquisitionPlansParser"><span class="type-signature"></span>new AcquisitionPlansParser<span class="signature">(workers)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>workers</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="Workers.html">Workers</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="service_acquisitionPlans_AcquisitionPlansParser.js.html">service/acquisitionPlans/AcquisitionPlansParser.js</a>, <a href="service_acquisitionPlans_AcquisitionPlansParser.js.html#line10">line 10</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Members</h3>
+
+        
+            
+<h4 class="name" id="domParser"><span class="type-signature"></span>domParser<span class="type-signature"> :DOMParser|null</span></h4>
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">DOMParser</span>
+|
+
+<span class="param-type">null</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="service_acquisitionPlans_AcquisitionPlansParser.js.html">service/acquisitionPlans/AcquisitionPlansParser.js</a>, <a href="service_acquisitionPlans_AcquisitionPlansParser.js.html#line26">line 26</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="shapeAttributesMap"><span class="type-signature"></span>shapeAttributesMap<span class="type-signature"> :Object</span></h4>
+
+
+
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Object</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="service_acquisitionPlans_AcquisitionPlansParser.js.html">service/acquisitionPlans/AcquisitionPlansParser.js</a>, <a href="service_acquisitionPlans_AcquisitionPlansParser.js.html#line31">line 31</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="parse"><span class="type-signature"></span>parse<span class="signature">(fileInfo, cb)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Parses an acquisition plan kml file.
+Parsing will be attempted in a web worker and if that fails it will be attemped on the main thread.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>fileInfo</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">
+                <h6>Properties</h6>
+                
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>satName</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The satellite name for the acquisition plan. The convention is to use the short name: "s1a", "s2b", "s5p", etc.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>url</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The url for the acquisition plan file</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>type</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">A type for the web workers. Default is "downloadAndParseKmls"</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>interior</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">A flag that indicates if interior renderables should be created. Default is true</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>outline</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">A flag that indicates if outline renderables should be created. Default is true</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>outlineAlpha</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Alpha value fot the outline. Default is 1</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>interiorAlpha</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Alpha value for the interior. Default is 0.2</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>highlightAlpha</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Alpha value for the interior highlight. Default is 0.5</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>filterDate</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">String</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">An ISODate string used for filtering out shapes that lees than this value. Default is the current date</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+            </td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>cb</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">A callback function, will be called with error and entry params</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="service_acquisitionPlans_AcquisitionPlansParser.js.html">service/acquisitionPlans/AcquisitionPlansParser.js</a>, <a href="service_acquisitionPlans_AcquisitionPlansParser.js.html#line52">line 52</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-SunPosition.html">SunPosition</a></li></ul><h3>Classes</h3><ul><li><a href="AcquisitionPlans.html">AcquisitionPlans</a></li><li><a href="AcquisitionPlansCache.html">AcquisitionPlansCache</a></li><li><a href="AcquisitionPlansParser.html">AcquisitionPlansParser</a></li><li><a href="Controls.html">Controls</a></li><li><a href="KmlGroundOverlayFull.html">KmlGroundOverlayFull</a></li><li><a href="module.exports_module.exports.html">exports</a></li><li><a href="module-CyclicPickController.html">CyclicPickController</a></li><li><a href="module-LayerOrder.html">LayerOrder</a></li><li><a href="module-Model.html">Model</a></li><li><a href="module-Orbits.html">Orbits</a></li><li><a href="module-TexturedSurfacePolygon.html">TexturedSurfacePolygon</a></li><li><a href="StarFieldLayer.html">StarFieldLayer</a></li><li><a href="StarFieldProgram.html">StarFieldProgram</a></li><li><a href="SwathCone.html">SwathCone</a></li><li><a href="TexturedSurfaceShape.html">TexturedSurfaceShape</a></li><li><a href="WebWorker.html">WebWorker</a></li><li><a href="Workers.html">Workers</a></li></ul><h3>Global</h3><ul><li><a href="global.html#footprintAttributes">footprintAttributes</a></li><li><a href="global.html#icon">icon</a></li><li><a href="global.html#id">id</a></li><li><a href="global.html#metadata">metadata</a></li><li><a href="global.html#products">products</a></li><li><a href="global.html#renderable">renderable</a></li><li><a href="global.html#renderables">renderables</a></li><li><a href="global.html#topocentricToLookAngles">topocentricToLookAngles</a></li><li><a href="global.html#twoline2satrec">twoline2satrec</a></li><li><a href="global.html#url">url</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Fri Nov 29 2019 13:54:07 GMT+0000 (Coordinated Universal Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: shapes/SwathCone.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: shapes/SwathCone.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import WorldWind from 'webworldwind-esa';
+
+const {
+    Color,
+    Renderable,
+    ShapeAttributes,
+    TriangleMesh
+} = WorldWind;
+
+import utils from '../util/eo/utils';
+
+class SwathCone extends Renderable {
+    /**
+     *
+     * @param satellite {Object|{currentPosition, nextPosition, currentHeading, nextHeading}}
+     * @param color
+     * @param translateDistance
+     * @param swathWidth
+     * @param swathHeight controls how big the swath is, higher values means a smaller swath
+     */
+    constructor(satellite, color, translateDistance, swathWidth, swathHeight = 35) {
+        super();
+
+        this._swathWidth = swathWidth;
+        this._swathHeight = swathHeight;
+        this._translateDistance = translateDistance;
+
+        const mesh = new TriangleMesh(this.positions(satellite), [
+            0, 1, 2,
+            0, 2, 3,
+            0, 3, 4,
+            0, 4, 1,
+        ], this.meshAttributes(
+            new Color(color.red, color.green, color.blue, 0.1),
+            new Color(color.red, color.green, color.blue, 0.6)
+        ));
+        mesh.outlineIndices = [
+            0, 1, 2, 3, 4, 0, 3, 2, 0, 1, 4
+        ];
+        this._mesh = mesh;
+    }
+
+    update(satellite) {
+        this._mesh.positions = this.positions(satellite);
+    }
+
+    positions(satellite) {
+        if(!this._translateDistance) {
+            satellite.origin = satellite.currentPosition;
+            satellite.heading = satellite.currentHeading;
+        }
+
+        const {
+            origin,
+            heading
+        } = this._translateDistance &amp;&amp; this.translateOrigin(satellite, this._translateDistance) || satellite;
+        const {
+            currentPosition
+        } = satellite;
+
+        const satPosition = {
+            latitude: currentPosition.latitude,
+            longitude: currentPosition.longitude,
+            altitude: currentPosition.altitude - 10000
+        };
+
+        const positions = [satPosition];
+        for(let i = 0; i &lt; 4; i++) {
+            const headingForPosition = i % 2 ?
+                45 + 90 * i - heading - this._swathHeight:
+                45 + 90 * i - heading + this._swathHeight;
+            positions.push(
+                utils.projectPosition(origin, headingForPosition, this._swathWidth),
+            );
+        }
+
+        return positions;
+    }
+
+    render(dc) {
+        if(!this.enabled) {
+            return;
+        }
+
+        this._mesh.render(dc);
+    }
+
+    translateOrigin(satellite, translateDistance) {
+        const origin = utils.projectPosition(satellite.currentPosition, 90 - satellite.currentHeading, translateDistance);
+        const nextOrigin = utils.projectPosition(satellite.nextPosition, 90 - satellite.nextHeading, translateDistance);
+        const headingRad = utils.headingAngleRadians(origin.latitude, origin.longitude, nextOrigin.latitude,
+            nextOrigin.longitude);
+
+        return {
+            origin: origin,
+            heading: utils.rad2deg(headingRad)
+        };
+    }
+
+    /**
+     * Prepare Mesh Attributes
+     * @private
+     * @param outlineColor
+     * @param interiorColor
+     */
+    meshAttributes(outlineColor, interiorColor) {
+        const pyramidAttributes = new ShapeAttributes(null);
+        pyramidAttributes.drawInterior = true;
+        pyramidAttributes.drawOutline = true;
+        pyramidAttributes.outlineColor = outlineColor;
+        pyramidAttributes.interiorColor = interiorColor;
+        pyramidAttributes.depthTest = true;
+        pyramidAttributes.applyLighting = true;
+        return pyramidAttributes;
+    }
+}
+
+export default SwathCone;</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-SunPosition.html">SunPosition</a></li></ul><h3>Classes</h3><ul><li><a href="AcquisitionPlans.html">AcquisitionPlans</a></li><li><a href="AcquisitionPlansCache.html">AcquisitionPlansCache</a></li><li><a href="AcquisitionPlansParser.html">AcquisitionPlansParser</a></li><li><a href="Controls.html">Controls</a></li><li><a href="KmlGroundOverlayFull.html">KmlGroundOverlayFull</a></li><li><a href="module.exports_module.exports.html">exports</a></li><li><a href="module-CyclicPickController.html">CyclicPickController</a></li><li><a href="module-LayerOrder.html">LayerOrder</a></li><li><a href="module-Model.html">Model</a></li><li><a href="module-Orbits.html">Orbits</a></li><li><a href="module-TexturedSurfacePolygon.html">TexturedSurfacePolygon</a></li><li><a href="StarFieldLayer.html">StarFieldLayer</a></li><li><a href="StarFieldProgram.html">StarFieldProgram</a></li><li><a href="SwathCone.html">SwathCone</a></li><li><a href="TexturedSurfaceShape.html">TexturedSurfaceShape</a></li><li><a href="WebWorker.html">WebWorker</a></li><li><a href="Workers.html">Workers</a></li></ul><h3>Global</h3><ul><li><a href="global.html#footprintAttributes">footprintAttributes</a></li><li><a href="global.html#icon">icon</a></li><li><a href="global.html#id">id</a></li><li><a href="global.html#metadata">metadata</a></li><li><a href="global.html#products">products</a></li><li><a href="global.html#renderable">renderable</a></li><li><a href="global.html#renderables">renderables</a></li><li><a href="global.html#topocentricToLookAngles">topocentricToLookAngles</a></li><li><a href="global.html#twoline2satrec">twoline2satrec</a></li><li><a href="global.html#url">url</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Fri Nov 29 2019 13:54:07 GMT+0000 (Coordinated Universal Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

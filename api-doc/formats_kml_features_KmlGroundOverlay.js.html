@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: formats/kml/features/KmlGroundOverlay.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: formats/kml/features/KmlGroundOverlay.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import WorldWind from 'webworldwind-esa';
+import TexturedSurfacePolygon from '../../../shapes/TexturedSurfacePolygon';
+
+const KmlGroundOverlay = WorldWind.KmlGroundOverlay,
+    Location = WorldWind.Location,
+    Sector = WorldWind.Sector,
+    ShapeAttributes = WorldWind.ShapeAttributes,
+    SurfaceImage = WorldWind.SurfaceImage;
+
+/**
+ * Constructs an KmlGroundOverlay. Applications usually don't call this constructor. It is called by {@link
+ * KmlFile} as objects from Kml file are read. This object is already concrete implementation.
+ *
+ * Properly displays non square Ground Overlays defined via LatLonQuad.
+ * @alias KmlGroundOverlayFull
+ * @classdesc Contains the data associated with GroundOverlay node.
+ * @see https://developers.google.com/kml/documentation/kmlreference#groundoverlay
+ * @augments KmlGroundOverlay
+ */
+class KmlGroundOverlayFull extends KmlGroundOverlay {
+    /**
+     * @inheritDoc
+     */
+    render(dc, kmlOptions) {
+        super.render(dc, kmlOptions);
+
+        if(!this._renderable &amp;&amp; this.enabled) {
+            if(this.kmlIcon) {
+                if(this.kmlLatLonBox) {
+                    this._renderable = new SurfaceImage(
+                        new Sector(
+                            this.kmlLatLonBox.kmlSouth,
+                            this.kmlLatLonBox.kmlNorth,
+                            this.kmlLatLonBox.kmlWest,
+                            this.kmlLatLonBox.kmlEast
+                        ),
+                        this.kmlIcon.kmlHref(kmlOptions.fileCache)
+                    );
+                } else if(this.kmlLatLonQuad) {
+                    const coordinates = this.kmlLatLonQuad.kmlCoordinates.split(' ');
+                    const boundaries = coordinates.map(coordinates => {
+                        const coordinate = coordinates.split(',');
+                        return new Location(coordinate[1], coordinate[0]);
+                    });
+
+                    const texture = new Image();
+                    texture.src = this.kmlIcon.kmlHref(kmlOptions.fileCache);
+
+                    this._renderable = new TexturedSurfacePolygon(boundaries, new ShapeAttributes());
+                    this._renderable.image = texture;
+                }
+
+                dc.redrawRequested = true;
+            }
+        }
+
+        if(this._renderable) {
+            this._renderable.render(dc);
+        }
+    }
+}
+
+export default KmlGroundOverlayFull;
+
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-SunPosition.html">SunPosition</a></li></ul><h3>Classes</h3><ul><li><a href="AcquisitionPlans.html">AcquisitionPlans</a></li><li><a href="AcquisitionPlansCache.html">AcquisitionPlansCache</a></li><li><a href="AcquisitionPlansParser.html">AcquisitionPlansParser</a></li><li><a href="Controls.html">Controls</a></li><li><a href="KmlGroundOverlayFull.html">KmlGroundOverlayFull</a></li><li><a href="module.exports_module.exports.html">exports</a></li><li><a href="module-CyclicPickController.html">CyclicPickController</a></li><li><a href="module-LayerOrder.html">LayerOrder</a></li><li><a href="module-Model.html">Model</a></li><li><a href="module-Orbits.html">Orbits</a></li><li><a href="module-TexturedSurfacePolygon.html">TexturedSurfacePolygon</a></li><li><a href="StarFieldLayer.html">StarFieldLayer</a></li><li><a href="StarFieldProgram.html">StarFieldProgram</a></li><li><a href="SwathCone.html">SwathCone</a></li><li><a href="TexturedSurfaceShape.html">TexturedSurfaceShape</a></li><li><a href="WebWorker.html">WebWorker</a></li><li><a href="Workers.html">Workers</a></li></ul><h3>Global</h3><ul><li><a href="global.html#footprintAttributes">footprintAttributes</a></li><li><a href="global.html#icon">icon</a></li><li><a href="global.html#id">id</a></li><li><a href="global.html#metadata">metadata</a></li><li><a href="global.html#products">products</a></li><li><a href="global.html#renderable">renderable</a></li><li><a href="global.html#renderables">renderables</a></li><li><a href="global.html#topocentricToLookAngles">topocentricToLookAngles</a></li><li><a href="global.html#twoline2satrec">twoline2satrec</a></li><li><a href="global.html#url">url</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Fri Nov 29 2019 13:54:07 GMT+0000 (Coordinated Universal Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

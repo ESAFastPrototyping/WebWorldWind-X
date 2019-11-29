@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: service/scihub/Product.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: service/scihub/Product.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import QuickLook from "./QuickLook";
+import WorldWind from 'webworldwind-esa';
+import TexturedSurfacePolygon from '../../shapes/TexturedSurfacePolygon';
+
+const {
+    Color,
+    ShapeAttributes,
+    Wkt
+} = WorldWind;
+
+export default class Product {
+    constructor(fetch, entry) {
+        if(!entry || !entry.id || !fetch) {
+            throw new Error(`Product#constructor Provided entry is either null or invalid. Entry ${entry}`);
+        }
+
+        this._id = entry.id;
+        this._entry = entry;
+
+        // Renderable related information
+        this._footprint = entry.str &amp;&amp; entry.str.footprint &amp;&amp; entry.str.footprint || null;
+        const icons = entry.link &amp;&amp; entry.link.length > 0 &amp;&amp;
+            entry.link.filter(link => link.rel &amp;&amp; link.rel === 'icon') || [];
+        const iconUrl = icons.length > 0 &amp;&amp; icons[0].href || null;
+        if(iconUrl) {
+            this._icon = new QuickLook(iconUrl, fetch);
+        } else {
+            this._icon = null;
+        }
+    }
+
+    /**
+     * Unique identifier of the specific product
+     * @returns {String} UUID of the given product
+     */
+    id() {
+        return this._id;
+    }
+
+    /**
+     * The whole entry related to this product.
+     * @returns {Object} Entry representing the product.
+     */
+    metadata() {
+        return this._entry;
+    }
+
+    /**
+     * Renderable for displaying this Product including QuickLook or null, if this wouldn't make any sense.
+     * It doesn't make sense when no footprint is provided.
+     * @returns {Promise&lt;Renderable>}
+     */
+    async renderable() {
+        if(!this._footprint) {
+            return Promise.resolve(null);
+        }
+
+        let boundaries = [];
+        new Wkt(this._footprint).load((wkt, objects) => {
+            objects.forEach(object => {
+                object.shapes().forEach(shape => {
+                    boundaries = shape._boundaries;
+                });
+            });
+        });
+        const renderable = new TexturedSurfacePolygon(boundaries, this.footprintAttributes());
+        if(this._icon) {
+            try {
+                renderable.image = await this._icon.icon();
+            } catch (e) {
+                console.log('ERROR: Product#renderable ', e);
+                renderable.error = e;
+            }
+        }
+        return renderable;
+    }
+
+    /**
+     * The default attributes to be used for the Footprint.
+     * @return {ShapeAttributes} Attributes for the footprint shapes
+     */
+    footprintAttributes() {
+        const shapeAttributes = new ShapeAttributes(null);
+        shapeAttributes.drawOutline = true;
+        shapeAttributes.drawInterior = true;
+        shapeAttributes.outlineColor = new Color(1, 0, 0, 1);
+        shapeAttributes.interiorColor = new Color(1, 1, 0, 0.3);
+        shapeAttributes.outlineWidth = 1;
+        return shapeAttributes;
+    }
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-SunPosition.html">SunPosition</a></li></ul><h3>Classes</h3><ul><li><a href="AcquisitionPlans.html">AcquisitionPlans</a></li><li><a href="AcquisitionPlansCache.html">AcquisitionPlansCache</a></li><li><a href="AcquisitionPlansParser.html">AcquisitionPlansParser</a></li><li><a href="Controls.html">Controls</a></li><li><a href="KmlGroundOverlayFull.html">KmlGroundOverlayFull</a></li><li><a href="module.exports_module.exports.html">exports</a></li><li><a href="module-CyclicPickController.html">CyclicPickController</a></li><li><a href="module-LayerOrder.html">LayerOrder</a></li><li><a href="module-Model.html">Model</a></li><li><a href="module-Orbits.html">Orbits</a></li><li><a href="module-TexturedSurfacePolygon.html">TexturedSurfacePolygon</a></li><li><a href="StarFieldLayer.html">StarFieldLayer</a></li><li><a href="StarFieldProgram.html">StarFieldProgram</a></li><li><a href="SwathCone.html">SwathCone</a></li><li><a href="TexturedSurfaceShape.html">TexturedSurfaceShape</a></li><li><a href="WebWorker.html">WebWorker</a></li><li><a href="Workers.html">Workers</a></li></ul><h3>Global</h3><ul><li><a href="global.html#footprintAttributes">footprintAttributes</a></li><li><a href="global.html#icon">icon</a></li><li><a href="global.html#id">id</a></li><li><a href="global.html#metadata">metadata</a></li><li><a href="global.html#products">products</a></li><li><a href="global.html#renderable">renderable</a></li><li><a href="global.html#renderables">renderables</a></li><li><a href="global.html#topocentricToLookAngles">topocentricToLookAngles</a></li><li><a href="global.html#twoline2satrec">twoline2satrec</a></li><li><a href="global.html#url">url</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Fri Nov 29 2019 13:54:07 GMT+0000 (Coordinated Universal Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

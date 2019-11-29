@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Class: StarFieldLayer</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Class: StarFieldLayer</h1>
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        <h2><span class="attribs"><span class="type-signature"></span></span>StarFieldLayer<span class="signature">(starDataSource)</span><span class="type-signature"></span></h2>
+        
+            <div class="class-description">Provides a layer showing stars, and the Sun around the Earth</div>
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+
+    
+    <h2>Constructor</h2>
+    
+
+    
+    <h4 class="name" id="StarFieldLayer"><span class="type-signature"></span>new StarFieldLayer<span class="signature">(starDataSource)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>starDataSource</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">URL</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">optional url for the stars data</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="layer_starfield_StarFieldLayer.js.html">layer/starfield/StarFieldLayer.js</a>, <a href="layer_starfield_StarFieldLayer.js.html#line44">line 44</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    </div>
+
+    
+        <h3 class="subsection-title">Extends</h3>
+
+        
+
+
+    <ul>
+        <li>Layer</li>
+    </ul>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Members</h3>
+
+        
+            
+<h4 class="name" id="showSun"><span class="type-signature"></span>showSun<span class="type-signature"> :Boolean</span></h4>
+
+
+
+
+<div class="description">
+    Indicates weather to show or hide the Sun
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Boolean</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-default">Default Value:</dt>
+    <dd class="tag-default"><ul class="dummy">
+            <li>true</li>
+        </ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="layer_starfield_StarFieldLayer.js.html">layer/starfield/StarFieldLayer.js</a>, <a href="layer_starfield_StarFieldLayer.js.html#line64">line 64</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="sunSize"><span class="type-signature"></span>sunSize<span class="type-signature"> :Number</span></h4>
+
+
+
+
+<div class="description">
+    The size of the Sun in pixels.
+This can not exceed the maximum allowed pointSize of the GPU.
+A warning will be given if the size is too big and the allowed max size will be used.
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Number</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-default">Default Value:</dt>
+    <dd class="tag-default"><ul class="dummy">
+            <li>128</li>
+        </ul></dd>
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="layer_starfield_StarFieldLayer.js.html">layer/starfield/StarFieldLayer.js</a>, <a href="layer_starfield_StarFieldLayer.js.html#line57">line 57</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+    
+
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-SunPosition.html">SunPosition</a></li></ul><h3>Classes</h3><ul><li><a href="AcquisitionPlans.html">AcquisitionPlans</a></li><li><a href="AcquisitionPlansCache.html">AcquisitionPlansCache</a></li><li><a href="AcquisitionPlansParser.html">AcquisitionPlansParser</a></li><li><a href="Controls.html">Controls</a></li><li><a href="KmlGroundOverlayFull.html">KmlGroundOverlayFull</a></li><li><a href="module.exports_module.exports.html">exports</a></li><li><a href="module-CyclicPickController.html">CyclicPickController</a></li><li><a href="module-LayerOrder.html">LayerOrder</a></li><li><a href="module-Model.html">Model</a></li><li><a href="module-Orbits.html">Orbits</a></li><li><a href="module-TexturedSurfacePolygon.html">TexturedSurfacePolygon</a></li><li><a href="StarFieldLayer.html">StarFieldLayer</a></li><li><a href="StarFieldProgram.html">StarFieldProgram</a></li><li><a href="SwathCone.html">SwathCone</a></li><li><a href="TexturedSurfaceShape.html">TexturedSurfaceShape</a></li><li><a href="WebWorker.html">WebWorker</a></li><li><a href="Workers.html">Workers</a></li></ul><h3>Global</h3><ul><li><a href="global.html#footprintAttributes">footprintAttributes</a></li><li><a href="global.html#icon">icon</a></li><li><a href="global.html#id">id</a></li><li><a href="global.html#metadata">metadata</a></li><li><a href="global.html#products">products</a></li><li><a href="global.html#renderable">renderable</a></li><li><a href="global.html#renderables">renderables</a></li><li><a href="global.html#topocentricToLookAngles">topocentricToLookAngles</a></li><li><a href="global.html#twoline2satrec">twoline2satrec</a></li><li><a href="global.html#url">url</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Fri Nov 29 2019 13:54:07 GMT+0000 (Coordinated Universal Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

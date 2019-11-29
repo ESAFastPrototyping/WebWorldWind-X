@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: util/workers/Workers.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: util/workers/Workers.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import { WebWorker } from './WebWorker.js';
+
+export class Workers {
+
+    /**
+     * Gets the number of logical CPU cores.
+     * @returns {Number}
+     */
+    static getCoreCount() {
+        return window.navigator.hardwareConcurrency || 2;
+    }
+
+    /**
+     * @alias Workers
+     * @constructor
+     * @param {*} Loader a webpack worker-loader
+     * @param {Number} numWorkers Maximum number of wokers to use
+     */
+    constructor(Loader, numWorkers) {
+        
+        this.workers = [];
+        this.queue = [];
+
+        this.onWorkerSuccess = this.onWorkerSuccess.bind(this);
+        this.onWorkerError = this.onWorkerError.bind(this);
+        
+        for (let i = 0; i &lt; numWorkers; i++) {
+            this.workers.push(new WebWorker(Loader, this.onWorkerSuccess, this.onWorkerError));
+        }
+    }
+
+    /**
+     * Queues some work to be proccessed by a web worker.
+     * 
+     * @param {*} data The data to send to the worker
+     * @param {Function} cb A callback function to call with the result from the worker
+     */
+    process(data, cb) {
+        const entry = {
+            id: this.generateId(),
+            processed: false,
+            dataToSend: data,
+            cb: cb,
+        };
+
+        this.queue.push(entry);
+
+        this.processMoreRequests();
+    }
+
+    /**
+     * Terminates all the web workers.
+     */
+    terminate() {
+        this.workers.forEach(worker => worker.stop());
+    }
+
+    onWorkerSuccess(response, workId) {
+        const err = response.err ? new Error(response.err) : null;
+        this.onWorkerResponse(err, response, workId);
+    }
+
+    onWorkerError(err, workId) {
+        this.onWorkerResponse(new Error(err.message, err.filename, err.lineno), null, workId);
+    }
+
+    onWorkerResponse(error, response, workId) {
+        this.processMoreRequests();
+
+        const index = this.queue.findIndex(entry => entry.id === workId);
+        if (index === -1) {
+            return;
+        }
+        const entry = this.queue[index];
+        this.queue.splice(index, 1);
+        if (entry.cb) {
+            entry.cb(error, response);
+        }
+    }
+
+    processMoreRequests() {
+        if (!this.queue.length) {
+            return;
+        }
+
+        const idleWorker = this.getIdleWorker();
+        
+        if (!idleWorker) {
+            return;
+        }
+
+        const entry = this.getQueueEntry();
+
+        if (!entry) {
+            return;
+        }
+
+        idleWorker.postMessage(entry.dataToSend, entry.id);
+        entry.processed = true;
+    }
+
+    getIdleWorker() {
+        return this.workers.find(worker => !worker.inProgress);
+    }
+
+    getQueueEntry() {
+        return this.queue.find(entry => !entry.processed);
+    }
+
+    generateId() {
+        return window.crypto.getRandomValues(new Uint32Array(1))[0];
+    }
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-SunPosition.html">SunPosition</a></li></ul><h3>Classes</h3><ul><li><a href="AcquisitionPlans.html">AcquisitionPlans</a></li><li><a href="AcquisitionPlansCache.html">AcquisitionPlansCache</a></li><li><a href="AcquisitionPlansParser.html">AcquisitionPlansParser</a></li><li><a href="Controls.html">Controls</a></li><li><a href="KmlGroundOverlayFull.html">KmlGroundOverlayFull</a></li><li><a href="module.exports_module.exports.html">exports</a></li><li><a href="module-CyclicPickController.html">CyclicPickController</a></li><li><a href="module-LayerOrder.html">LayerOrder</a></li><li><a href="module-Model.html">Model</a></li><li><a href="module-Orbits.html">Orbits</a></li><li><a href="module-TexturedSurfacePolygon.html">TexturedSurfacePolygon</a></li><li><a href="StarFieldLayer.html">StarFieldLayer</a></li><li><a href="StarFieldProgram.html">StarFieldProgram</a></li><li><a href="SwathCone.html">SwathCone</a></li><li><a href="TexturedSurfaceShape.html">TexturedSurfaceShape</a></li><li><a href="WebWorker.html">WebWorker</a></li><li><a href="Workers.html">Workers</a></li></ul><h3>Global</h3><ul><li><a href="global.html#footprintAttributes">footprintAttributes</a></li><li><a href="global.html#icon">icon</a></li><li><a href="global.html#id">id</a></li><li><a href="global.html#metadata">metadata</a></li><li><a href="global.html#products">products</a></li><li><a href="global.html#renderable">renderable</a></li><li><a href="global.html#renderables">renderables</a></li><li><a href="global.html#topocentricToLookAngles">topocentricToLookAngles</a></li><li><a href="global.html#twoline2satrec">twoline2satrec</a></li><li><a href="global.html#url">url</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Fri Nov 29 2019 13:54:07 GMT+0000 (Coordinated Universal Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

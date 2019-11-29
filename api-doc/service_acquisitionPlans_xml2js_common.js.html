@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: service/acquisitionPlans/xml2js/common.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: service/acquisitionPlans/xml2js/common.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/**
+ * Created by Florin on 3/10/2017.
+ */
+
+export default {
+    sanitize: function (text) {
+        return text.replace(/&amp;/g, "&amp;amp;").replace(/&lt;/g, "&amp;lt;").replace(/>/g, "&amp;gt;").replace(/"/g, "&amp;quot;").replace(/'/g, "&amp;#39;");
+    },
+    copyOptions: function (options) {
+        var key, copy = {};
+        for (key in options) {
+            if (options.hasOwnProperty(key)) {
+                copy[key] = options[key];
+            }
+        }
+        return copy;
+    },
+    ensureFlagExists: function (item, options) {
+        if (!(item in options) || typeof options[item] !== 'boolean') {
+            options[item] = false;
+        }
+    },
+    ensureSpacesExists: function (options) {
+        if (!('spaces' in options) || (typeof options.spaces !== 'number' &amp;&amp; typeof options.spaces !== 'string')) {
+            options.spaces = 0;
+        }
+    },
+    ensureKeyExists: function (key, options) {
+        if (!(key + 'Key' in options) || typeof options[key + 'Key'] !== 'string') {
+            options[key + 'Key'] = options.compact ? '_' + key : key;
+        }
+    },
+    getCommandLineHelp: function (command, requiredArgs, optionalArgs) {
+        var reqArgs = requiredArgs.reduce(function (res, arg) {return res + ' &lt;' + arg.arg + '>';}, '');
+        var output = 'Usage: ' + command + reqArgs + ' [options]' + '\n';
+        requiredArgs.forEach(function (argument) {
+            output += '  &lt;' + argument.arg + '>' + Array(20 - argument.arg.length).join(' ') + argument.desc + '\n';
+        });
+        output += '\nOptions:' + '\n';
+        optionalArgs.forEach(function (argument) {
+            output += '  --' + argument.arg + Array(20 - argument.arg.length).join(' ') + argument.desc + '\n';
+        });
+        return output;
+    },
+    mapCommandLineArgs: function (requiredArgs, optionalArgs) {
+        var options = {}, r, o, a = 2;
+        for (r = 0; r &lt; requiredArgs.length; r += 1) {
+            if (a &lt; process.argv.length &amp;&amp; process.argv[a].substr(0, 1) !== '-' &amp;&amp; process.argv[a] !== 'JASMINE_CONFIG_PATH=./jasmine.json') {
+                options[requiredArgs[r].option] = process.argv[a++];
+            } else {
+                break;
+            }
+        }
+        for (; a &lt; process.argv.length; a += 1) {
+            for (o = 0; o &lt; optionalArgs.length; o += 1) {
+                if (optionalArgs[o].alias === process.argv[a].slice(1) || optionalArgs[o].arg === process.argv[a].slice(2)) {
+                    break;
+                }
+            }
+            if (o &lt; optionalArgs.length) {
+                switch (optionalArgs[o].type) {
+                case 'file': case 'string': case 'number':
+                    if (a + 1 &lt; process.argv.length) {
+                        a += 1;
+                        options[optionalArgs[o].option] = (optionalArgs[o].type === 'number' ? Number(process.argv[a]) : process.argv[a]);
+                    }
+                    break;
+                case 'flag':
+                    options[optionalArgs[o].option] = true; break;
+                }
+            }
+        }
+        return options;
+    }
+};</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-SunPosition.html">SunPosition</a></li></ul><h3>Classes</h3><ul><li><a href="AcquisitionPlans.html">AcquisitionPlans</a></li><li><a href="AcquisitionPlansCache.html">AcquisitionPlansCache</a></li><li><a href="AcquisitionPlansParser.html">AcquisitionPlansParser</a></li><li><a href="Controls.html">Controls</a></li><li><a href="KmlGroundOverlayFull.html">KmlGroundOverlayFull</a></li><li><a href="module.exports_module.exports.html">exports</a></li><li><a href="module-CyclicPickController.html">CyclicPickController</a></li><li><a href="module-LayerOrder.html">LayerOrder</a></li><li><a href="module-Model.html">Model</a></li><li><a href="module-Orbits.html">Orbits</a></li><li><a href="module-TexturedSurfacePolygon.html">TexturedSurfacePolygon</a></li><li><a href="StarFieldLayer.html">StarFieldLayer</a></li><li><a href="StarFieldProgram.html">StarFieldProgram</a></li><li><a href="SwathCone.html">SwathCone</a></li><li><a href="TexturedSurfaceShape.html">TexturedSurfaceShape</a></li><li><a href="WebWorker.html">WebWorker</a></li><li><a href="Workers.html">Workers</a></li></ul><h3>Global</h3><ul><li><a href="global.html#footprintAttributes">footprintAttributes</a></li><li><a href="global.html#icon">icon</a></li><li><a href="global.html#id">id</a></li><li><a href="global.html#metadata">metadata</a></li><li><a href="global.html#products">products</a></li><li><a href="global.html#renderable">renderable</a></li><li><a href="global.html#renderables">renderables</a></li><li><a href="global.html#topocentricToLookAngles">topocentricToLookAngles</a></li><li><a href="global.html#twoline2satrec">twoline2satrec</a></li><li><a href="global.html#url">url</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Fri Nov 29 2019 13:54:07 GMT+0000 (Coordinated Universal Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

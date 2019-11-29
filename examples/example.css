@@ -1,0 +1,18 @@
+body>div.bmd-layout-canvas {
+    position: absolute;
+}
+
+#wwd-globe {
+    position:absolute; 
+    top: 55px; 
+    bottom: 5px; 
+    left: 0; 
+    right: 0; 
+    z-index: 2;
+}
+
+#canvasOne {
+    width: 100%; 
+    height: 100%; 
+    background-color: #fafafa;
+}

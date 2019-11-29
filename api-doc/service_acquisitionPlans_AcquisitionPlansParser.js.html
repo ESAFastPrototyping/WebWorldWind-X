@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: service/acquisitionPlans/AcquisitionPlansParser.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: service/acquisitionPlans/AcquisitionPlansParser.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>import toGeoJSON from './toGeoJson/togeojson';
+
+export class AcquisitionPlansParser {
+
+    /**
+     * @alias AcquisitionPlansParser
+     * @constructor
+     * @param {Workers} workers 
+     */
+    constructor(workers) {
+        if (!workers) {
+            throw (new Error('AcquisitionPlansParser - constructor - missing workers instance'));
+        }
+
+        this.workers = workers;
+
+        this.InteriorCtor = WorldWind ? WorldWind.SurfacePolygon : null;
+        this.OutlineCtor = WorldWind ? WorldWind.Path : null;
+        this.ShapeAttributesCtor = WorldWind ? WorldWind.ShapeAttributes : null;
+        this.PositionCtor = WorldWind ? WorldWind.Position : null;
+        this.ColorCtor = WorldWind ? WorldWind.Color : null;
+
+        /**
+         * @type {DOMParser|null}
+         */
+        this.domParser = null;
+
+        /**
+         * @type {Object}
+         */
+        this.shapeAttributesMap = Object.create(null);
+    }
+
+    /**
+     * Parses an acquisition plan kml file.
+     * Parsing will be attempted in a web worker and if that fails it will be attemped on the main thread.
+     * 
+     * @param {{ satName: String, url: String, type: String, interior: Boolean, outline: Boolean, outlineAlpha: Number, interiorAlpha: Number, highlightAlpha: Number, filterDate: String }} fileInfo
+     * 
+     * @param {String} fileInfo.satName The satellite name for the acquisition plan. The convention is to use the short name: "s1a", "s2b", "s5p", etc.
+     * @param {String} fileInfo.url The url for the acquisition plan file
+     * @param {String} fileInfo.type A type for the web workers. Default is "downloadAndParseKmls"
+     * @param {Boolean} fileInfo.interior A flag that indicates if interior renderables should be created. Default is true
+     * @param {Boolean} fileInfo.outline A flag that indicates if outline renderables should be created. Default is true
+     * @param {Number} fileInfo.outlineAlpha Alpha value fot the outline. Default is 1
+     * @param {Number} fileInfo.interiorAlpha Alpha value for the interior. Default is 0.2
+     * @param {Number} fileInfo.highlightAlpha Alpha value for the interior highlight. Default is 0.5
+     * @param {String} fileInfo.filterDate An ISODate string used for filtering out shapes that lees than this value. Default is the current date
+     * 
+     * @param {Function} cb A callback function, will be called with error and entry params
+     */
+    parse(fileInfo, cb) {
+        fileInfo.type = fileInfo.type || 'downloadAndParseKmls';
+        fileInfo.filterDate = fileInfo.filterDate || new Date().toISOString();
+
+        this.workers.process(fileInfo, (err, result) => {
+            if (err) {
+                return cb(err);
+            }
+
+            const { shapes, satName, url } = result;
+            let parsedShapes;
+
+            if (typeof shapes === 'string') {
+                console.info('Worker unable to parse kml file', url);
+                try {
+                    parsedShapes = this.parseSync(shapes, satName, fileInfo.filterDate);
+                }
+                catch (error) {
+                    return cb(error);
+                }
+            }
+            else {
+                parsedShapes = shapes;
+            }
+
+            let outlines;
+            let interiors;
+            let interval;
+
+            try {
+                ({ outlines, interiors, interval } = this.makeRenderables(parsedShapes, fileInfo));
+            }
+            catch (error) {
+                return cb(error);
+            }
+
+            if ((outlines || interiors) &amp;&amp; interval) {
+                return cb(null, this.formatOutput({ satName, url }, interval, outlines, interiors));
+            }
+        });
+    }
+
+    parseSync(kmlString, satName, filterDate) {
+        if (!this.domParser) {
+            this.domParser = new DOMParser();
+        }
+
+        const kmlDoc = this.domParser.parseFromString(kmlString, 'text/xml');
+        const geoJson = toGeoJSON.kml(kmlDoc);
+        let shapes = geoJson.features;
+
+        const isSentinel2 = satName.includes('s2');
+        const nowDate = new Date(filterDate);
+        shapes = shapes.filter(shape => {
+            const isInTheFuture = new Date(shape.properties.timespan.end) >= nowDate;
+
+            if (isSentinel2) {
+                return (
+                    isInTheFuture &amp;&amp;
+                    shape.properties.Mode === 'NOBS' &amp;&amp;
+                    shape.properties.Timeliness === 'NOMINAL'
+                );
+            }
+
+            return isInTheFuture;
+        });
+
+        return shapes;
+    }
+
+    makeRenderables(shapes, fileInfo) {
+        const outlines = [];
+        const interiors = [];
+
+        const interval = {
+            startDate: Number.MAX_SAFE_INTEGER,
+            endDate: Number.MIN_SAFE_INTEGER
+        };
+
+        for (let i = 0; i &lt; shapes.length; i++) {
+            let shape = shapes[i];
+            let coords = shape.coordinates;
+            let color = shape.color;
+            let extendedData = shape.extendedData;
+
+            if (shape.geometry) {
+                coords = shape.geometry.coordinates[0];
+            }
+            if (shape.properties) {
+                color = shape.properties.lineColor;
+                extendedData = shape.properties;
+            }
+
+            let positions = this.makePositions(coords);
+
+            if (fileInfo.outline !== false) {
+                let pathAttributes = this.makePathAttributes(color, fileInfo.outlineAlpha);
+                let path = new this.OutlineCtor(positions, pathAttributes);
+                path.altitudeMode = 'clampToGround';
+                path.followTerrain = true;
+                path.expiryTime = Number.MAX_SAFE_INTEGER;
+                this.setTimeInterval(path, extendedData, interval);
+                path.kmlProps.satName = fileInfo.satName;
+                outlines.push(path);
+            }
+
+            if (fileInfo.interior !== false) {
+                let surfacePolygonAttributes = this.makeSurfacePolygonAttributes(color, fileInfo.interiorAlpha);
+                let surfacePolygon = new this.InteriorCtor(positions, surfacePolygonAttributes);
+                surfacePolygon.highlightAttributes = this.makeSurfacePolygonHighlightAttributes(color, fileInfo.highlightAlpha);
+                this.setTimeInterval(surfacePolygon, extendedData, interval);
+                surfacePolygon.kmlProps.satName = fileInfo.satName;
+                interiors.push(surfacePolygon);
+            }
+        }
+
+        interval.startDate = new Date(interval.startDate);
+        interval.endDate = new Date(interval.endDate);
+
+        return {
+            outlines,
+            interiors,
+            interval,
+        };
+    }
+
+    makePositions(coords) {
+        const positions = [];
+
+        for (let i = 0, len = coords.length; i &lt; len; i++) {
+            let coord = coords[i];
+            let pos = new this.PositionCtor(
+                coord[1] || coord.latitude,
+                coord[0] || coord.longitude,
+                coord[2] || 0
+            );
+            if (pos.longitude &lt; -180) {
+                pos.longitude = pos.longitude + 360;
+            }
+            if (pos.longitude > 180) {
+                pos.longitude = pos.longitude - 360;
+            }
+            positions.push(pos);
+        }
+
+        return positions;
+    }
+
+    makePathAttributes(hexColor, alpha = 1) {
+        const key = hexColor + 'path';
+        
+        if (this.shapeAttributesMap[key]) {
+            return this.shapeAttributesMap[key];
+        }
+
+        const attributes =  new this.ShapeAttributesCtor(null);
+        attributes.drawOutline = true;
+        attributes.drawInterior = false;
+        attributes.outlineColor = this.makeColor(hexColor, alpha);
+
+        this.shapeAttributesMap[key] = attributes;
+
+        return attributes;
+    }
+
+    makeSurfacePolygonAttributes(props, alpha = 0.2) {
+        const hexColor = props.lineColor || props;
+        const key = hexColor + 'poly';
+
+        if (this.shapeAttributesMap[key]) {
+            return this.shapeAttributesMap[key];
+        }
+
+        const attributes = new this.ShapeAttributesCtor(null);
+        attributes.drawOutline = false;
+        attributes.drawInterior = true;
+        attributes.interiorColor = this.makeColor(hexColor, alpha);
+
+        this.shapeAttributesMap[key] = attributes;
+
+        return attributes;
+    }
+
+    makeSurfacePolygonHighlightAttributes(props, alpha = 0.5) {
+        const hexColor = props.lineColor || props;
+
+        const attributes = new this.ShapeAttributesCtor(null);
+        attributes.drawOutline = false;
+        attributes.drawInterior = true;
+        attributes.interiorColor = this.makeColor(hexColor, alpha);
+
+        return attributes;
+    }
+
+    makeColor(hexColor, alpha) {
+        const blue = hexColor.substring(2, 4);
+        const green = hexColor.substring(4, 6);
+        const red = hexColor.substring(6, 8);
+
+        const r = parseInt(red, 16) / 255;
+        const g = parseInt(green, 16) / 255;
+        const b = parseInt(blue, 16) / 255;
+
+        return new this.ColorCtor(r, g, b, alpha);
+    }
+
+    setTimeInterval(renderable, props, interval) {
+        const startTime = this.dateStringToUTC(props.ObservationTimeStart || props.timespan.begin);
+        const endTime = this.dateStringToUTC(props.ObservationTimeStop || props.timespan.end);
+        const startTimeMs = (new Date(startTime)).getTime();
+        const endTimeMs = (new Date(endTime)).getTime();
+
+        if (interval.startDate > startTimeMs) {
+            interval.startDate = startTimeMs;
+        }
+        if (interval.endDate &lt; endTimeMs) {
+            interval.endDate = endTimeMs;
+        }
+
+        renderable.kmlProps = props;
+        renderable.kmlProps.startDate = new Date(startTimeMs);
+        renderable.kmlProps.endDate = new Date(endTimeMs);
+        renderable.type = 'acqPlan';
+    }
+
+    dateStringToUTC(dateString) {
+        const lastChar = dateString[dateString.length - 1];
+        if (lastChar.toLowerCase() !== 'z') {
+            return dateString + 'Z';
+        }
+        return dateString;
+    }
+
+    formatOutput(fileInfo, interval, outlines = [], interiors = []) {
+        return {
+            url: fileInfo.url,
+            satName: fileInfo.satName,
+            outlines: outlines,
+            interiors: interiors,
+            startDate: interval.startDate,
+            endDate: interval.endDate,
+        };
+    }
+
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-SunPosition.html">SunPosition</a></li></ul><h3>Classes</h3><ul><li><a href="AcquisitionPlans.html">AcquisitionPlans</a></li><li><a href="AcquisitionPlansCache.html">AcquisitionPlansCache</a></li><li><a href="AcquisitionPlansParser.html">AcquisitionPlansParser</a></li><li><a href="Controls.html">Controls</a></li><li><a href="KmlGroundOverlayFull.html">KmlGroundOverlayFull</a></li><li><a href="module.exports_module.exports.html">exports</a></li><li><a href="module-CyclicPickController.html">CyclicPickController</a></li><li><a href="module-LayerOrder.html">LayerOrder</a></li><li><a href="module-Model.html">Model</a></li><li><a href="module-Orbits.html">Orbits</a></li><li><a href="module-TexturedSurfacePolygon.html">TexturedSurfacePolygon</a></li><li><a href="StarFieldLayer.html">StarFieldLayer</a></li><li><a href="StarFieldProgram.html">StarFieldProgram</a></li><li><a href="SwathCone.html">SwathCone</a></li><li><a href="TexturedSurfaceShape.html">TexturedSurfaceShape</a></li><li><a href="WebWorker.html">WebWorker</a></li><li><a href="Workers.html">Workers</a></li></ul><h3>Global</h3><ul><li><a href="global.html#footprintAttributes">footprintAttributes</a></li><li><a href="global.html#icon">icon</a></li><li><a href="global.html#id">id</a></li><li><a href="global.html#metadata">metadata</a></li><li><a href="global.html#products">products</a></li><li><a href="global.html#renderable">renderable</a></li><li><a href="global.html#renderables">renderables</a></li><li><a href="global.html#topocentricToLookAngles">topocentricToLookAngles</a></li><li><a href="global.html#twoline2satrec">twoline2satrec</a></li><li><a href="global.html#url">url</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.3</a> on Fri Nov 29 2019 13:54:07 GMT+0000 (Coordinated Universal Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
