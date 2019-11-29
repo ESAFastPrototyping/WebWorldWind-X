@@ -1,6 +1,6 @@
 {
   "name": "webworldwind-x",
-  "version": "2.5.1",
+  "version": "2.6.1",
   "description": "Extensions for Web WorldWind",
   "main": "dist/main.js",
   "files": [
@@ -30,19 +30,22 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/WorldWindLabs/WebWorldWind-X.git"
+    "url": "https://github.com/ESAFastPrototyping/WebWorldWind-X.git"
   },
   "keywords": [
     "Web World Wind",
     "Earth Observation",
     "3D Globe"
   ],
-  "author": "Claudia Ifrim, Florin Draghici, Jakub Balhar, and Yann Voumard",
-  "license": "APL-2.0",
+  "author": "WebWorldWind ESA Team",
+  "contributors": [
+    "ESA Consortium Contact <yann.voumard@solenix.ch>"
+  ],
+  "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/WorldWindLabs/WebWorldWind-X/issues"
+    "url": "https://github.com/ESAFastPrototyping/WebWorldWind-X/issues"
   },
-  "homepage": "https://worldwindlabs.github.io/WebWorldWind-X/",
+  "homepage": "https://esafastprototyping.github.io/WebWorldWind-X/",
   "devDependencies": {
     "@babel/core": "7.0.0",
     "@babel/preset-env": "7.1.0",
@@ -53,7 +56,7 @@
     "del-cli": "1.1.0",
     "http-server": "0.11.1",
     "jasmine": "3.2.0",
-    "jsdoc": "3.5.5",
+    "jsdoc": "^3.6.3",
     "jshint": "2.10.2",
     "karma": "3.0.0",
     "karma-babel-preprocessor": "8.0.1",
@@ -74,7 +77,7 @@
   },
   "dependencies": {
     "easysax": "0.3.2",
-    "webworldwind-esa": "1.0.0-rc.1",
+    "webworldwind-esa": "1.0.0",
     "xml-js": "1.6.11"
   }
 }

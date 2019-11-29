@@ -6,7 +6,7 @@ The internal structure of this repository copies the structure of the core repos
 
 ## Get started
 
-You can explore the extensions in action at https://worldwindlabs.github.io/WebWorldWind-X/.
+You can explore the extensions in action at https://esafastprototyping.github.io/WebWorldWind-X/.
 
 To build and serve the extensions and examples locally, run: `npm start`
 
@@ -14,12 +14,12 @@ To build and serve the extensions and examples locally, run: `npm start`
 
 To install the library run `npm install --save webworldwind-x` at the command line.
 
-To use the classes from the library you need to import the library as an object and then you can either reference them 
+To use the classes from the library you need to import the library as an object and then you can either reference them
 via . notation or destructure them to the relevant classes.
 
 Destructuring example
 
-``` 
+```
 import WorldWindX from 'webworldwind-x;
 const {
     AcquisitionPlans,
@@ -42,7 +42,7 @@ const {
 
 Dot notation
 
-``` 
+```
 import WorldWindX from 'webworldwind-x;
 const acqPlans = new WorldWindX.AcquisitionPlans();
 ```
