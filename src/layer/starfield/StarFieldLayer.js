@@ -4,6 +4,7 @@
 import Celestial from './Celestial';
 import StarFieldProgram from './StarFieldProgram';
 import SunPosition from './SunPosition';
+import MoonPosition from './MoonPosition';
 
 import WorldWind from 'webworldwind-esa';
 const {
@@ -63,9 +64,17 @@ class StarFieldLayer extends Layer {
          */
         this.showSun = true;
 
+        /**
+         * Indicates weather to show or hide the Moon
+         * @type {Boolean}
+         * @default true
+         */
+        this.showMoon = true;
+
         //Documented in defineProperties below.
-        this._starDataSource = starDataSource || WorldWind.configuration.baseUrl + 'images/stars.json';
+        this._starDataSource = starDataSource || WorldWind.configuration.baseUrl + 'data/stars.json';
         this._sunImageSource = WorldWind.configuration.baseUrl + 'images/sunTexture.png';
+        this._moonImageSource = WorldWind.configuration.baseUrl + 'images/moonTexture.png';
 
         //Internal use only.
         //The MVP matrix of this layer.
@@ -98,6 +107,10 @@ class StarFieldLayer extends Layer {
         this._sunPositionsCacheKey = '';
         this._sunBufferView = new Float32Array(4);
 
+        //Internal use only.
+        this._moonPositionsCacheKey = '';
+        this._moonBufferView = new Float32Array(4);
+        
         //Internal use only.
         this._MAX_GL_POINT_SIZE = 0;
 
@@ -193,6 +206,19 @@ class StarFieldLayer extends Layer {
         this._sunImageSource = value;
     }
 
+    /**
+     * Url for the moon texture image.
+     * @memberof StarFieldLayer.prototype
+     * @type {URL}
+     */
+    get moonImageSource() {
+        return this._moonImageSource;
+    }
+    
+    set moonImageSource(value) {
+        this._moonImageSource = value;
+    }
+
     // Documented in superclass.
     doRender(dc) {
         if (dc.globe.is2D()) {
@@ -216,6 +242,7 @@ class StarFieldLayer extends Layer {
     // Internal. Intentionally not documented.
     haveResources(dc) {
         let sunTexture = dc.gpuResourceCache.resourceForKey(this._sunImageSource);
+        let moonTexture = dc.gpuResourceCache.resourceForKey(this._moonImageSource);
         let planetTextures = this.planets.every(planet => {
             const texture = dc.gpuResourceCache.resourceForKey(planet.url);
             return !!texture;
@@ -223,6 +250,7 @@ class StarFieldLayer extends Layer {
         return (
             this._starData != null &&
             sunTexture != null &&
+            moonTexture != null &&
             planetTextures
         );
     }
@@ -239,6 +267,11 @@ class StarFieldLayer extends Layer {
         let sunTexture = gpuResourceCache.resourceForKey(this._sunImageSource);
         if (!sunTexture) {
             gpuResourceCache.retrieveTexture(gl, this._sunImageSource);
+        }
+
+        let moonTexture = gpuResourceCache.resourceForKey(this._moonImageSource);
+        if (!moonTexture) {
+            gpuResourceCache.retrieveTexture(gl, this._moonImageSource);
         }
 
         this.planets.forEach(planet => {
@@ -265,6 +298,10 @@ class StarFieldLayer extends Layer {
 
         if (this.showSun) {
             this.renderSun(dc);
+        }
+
+        if (this.showMoon) {
+            this.renderMoon(dc);
         }
 
         if (this.showPlanets) {
@@ -421,6 +458,52 @@ class StarFieldLayer extends Layer {
 
         let sunTexture = dc.gpuResourceCache.resourceForKey(this._sunImageSource);
         sunTexture.bind(dc);
+
+        gl.drawArrays(gl.POINTS, 0, 1);
+    }
+
+    // Internal. Intentionally not documented.
+    renderMoon(dc) {
+        let gl = dc.currentGlContext;
+        let program = dc.currentProgram;
+        let gpuResourceCache = dc.gpuResourceCache;
+
+        if (!this._MAX_GL_POINT_SIZE) {
+            this._MAX_GL_POINT_SIZE = gl.getParameter(gl.ALIASED_POINT_SIZE_RANGE)[1];
+        }
+        if (this.sunSize > this._MAX_GL_POINT_SIZE) {
+            Logger.log(Logger.LEVEL_WARNING, 'StarFieldLayer - sunSize is to big, max size allowed is: ' +
+                this._MAX_GL_POINT_SIZE);
+        }
+
+        let moonCelestialLocation = MoonPosition.getAsCelestialLocation(this.time || new Date());
+
+        this._moonBufferView[0] = moonCelestialLocation.declination;
+        this._moonBufferView[1] = moonCelestialLocation.rightAscension;
+        this._moonBufferView[2] = Math.min(this.sunSize, this._MAX_GL_POINT_SIZE);
+        this._moonBufferView[3] = 1;
+
+        if (!this._moonPositionsCacheKey) {
+            this._moonPositionsCacheKey = gpuResourceCache.generateCacheKey();
+        }
+        let vboId = gpuResourceCache.resourceForKey(this._moonPositionsCacheKey);
+        if (!vboId) {
+            vboId = gl.createBuffer();
+            gpuResourceCache.putResource(this._moonPositionsCacheKey, vboId, this._moonBufferView.length * 4);
+            gl.bindBuffer(gl.ARRAY_BUFFER, vboId);
+            gl.bufferData(gl.ARRAY_BUFFER, this._moonBufferView, gl.DYNAMIC_DRAW);
+        }
+        else {
+            gl.bindBuffer(gl.ARRAY_BUFFER, vboId);
+            gl.bufferSubData(gl.ARRAY_BUFFER, 0, this._moonBufferView);
+        }
+        dc.frameStatistics.incrementVboLoadCount(1);
+        gl.vertexAttribPointer(0, 4, gl.FLOAT, false, 0, 0);
+
+        program.loadFragMode(gl, program.FRAG_MODE_TEXTURE);
+
+        let moonTexture = dc.gpuResourceCache.resourceForKey(this._moonImageSource);
+        moonTexture.bind(dc);
 
         gl.drawArrays(gl.POINTS, 0, 1);
     }
