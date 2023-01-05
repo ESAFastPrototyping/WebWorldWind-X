@@ -47,7 +47,7 @@
   },
   "homepage": "https://esafastprototyping.github.io/WebWorldWind-X/",
   "devDependencies": {
-    "@babel/core": "7.0.0",
+    "@babel/core": "7.20.12",
     "@babel/preset-env": "7.1.0",
     "babel-loader": "8.0.0",
     "babel-polyfill": "6.26.0",
